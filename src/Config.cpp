@@ -56,6 +56,7 @@ namespace {
         { kSectionOffsets, L"EntityCount", &sdk::off::kEntityCount, Kind::Offset },
         { kSectionOffsets, L"ViewMatrix",  &sdk::off::kViewMatrix,  Kind::Offset },
         { kSectionOffsets, L"GameState",   &sdk::off::kGameState,   Kind::Offset },
+        { kSectionOffsets, L"EntitiesModel", &sdk::off::kEntitiesModel, Kind::Offset },
         { kSectionEntity,  L"Position",    &sdk::ent::kPosition,    Kind::Offset },
         { kSectionEntity,  L"Rotation",    &sdk::ent::kRotation,    Kind::Offset },
         { kSectionEntity,  L"Health",      &sdk::ent::kHealth,      Kind::Offset },
@@ -69,6 +70,9 @@ namespace {
         { kSectionEntity,  L"Transform",   &sdk::ent::kTransform,   Kind::Offset },
         { kSectionEntity,  L"TransformPos", &sdk::ent::kTransformPos, Kind::Offset },
         { kSectionEntity,  L"Head",        &sdk::ent::kHead,        Kind::Offset },
+        { kSectionEntity,  L"CommonData",  &sdk::ent::kCommonData,  Kind::Offset },
+        { kSectionEntity,  L"PrivateData", &sdk::ent::kPrivateData, Kind::Offset },
+        { kSectionEntity,  L"PrimValue",   &sdk::ent::kPrimValue,   Kind::Offset },
 
         // Display settings.
         { kSectionDisplay, L"Enabled",        &g.enabled,        Kind::Bool },

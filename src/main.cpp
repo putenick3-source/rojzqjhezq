@@ -47,7 +47,10 @@ namespace {
 
     bool waitForProcess(Process& proc, std::atomic<bool>& run) {
         while (run) {
-            if (proc.attach(sdk::kProcessName, sdk::kAnchorModule)) return true;
+            if (proc.attach(sdk::kProcessName, sdk::kAnchorModule)) {
+                diag::log(L"attach: reussie");
+                return true;
+            }
             std::this_thread::sleep_for(std::chrono::milliseconds(750));
         }
         return false;
@@ -81,13 +84,23 @@ namespace {
 
         Projection found;
         size_t checked = 0;
-        if (scan::findViewProjection(proc, found, 512u * 1024u * 1024u, checked) &&
-            found.valid() && found.addr > proc.base()) {
+
+        const std::vector<Process::Region> regions = proc.regions(512u * 1024u * 1024u);
+        size_t bytes = 0;
+        for (const auto& r : regions) bytes += r.size;
+        diag::log(L"projection: %zu regions, %zu octets enumeres", regions.size(), bytes);
+
+        if (scan::findViewProjection(proc, regions, found, checked) &&
+            found.valid() && found.addr != 0) {
             vp = found;
             sdk::off::kViewMatrix = found.addr - proc.base();
             diag::log(L"projection: ViewMatrix detectee = 0x%llX (%zu candidats)",
                       (unsigned long long)sdk::off::kViewMatrix, checked);
+            return;
         }
+
+        // Scan infructueux: on journalise le nombre de candidats testes.
+        diag::log(L"projection: echec (%zu candidats testes)", checked);
     }
 
     // Small status pill inside the config menu (ESP.cpp is left untouched).
@@ -138,6 +151,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     Process proc;
     if (!waitForProcess(proc, running)) return 0;
+    diag::log(L"boucle: entree apres attache");
 
     World world;
     buildguard::Verdict verdict = buildguard::Verdict::Unknown;
@@ -207,6 +221,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         }
 
         // --- Render ---
+        static bool trameLogged = false;
+        if (!trameLogged) {
+            diag::log(L"boucle: trame");
+            trameLogged = true;
+        }
         overlay.render([&]() {
             const auto snap = world.get();
             esp::render(snap, cfg, proc,

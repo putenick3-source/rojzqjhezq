@@ -6,6 +6,15 @@ rem Output: build_driver\RrSvc.sys
 
 setlocal
 
+rem Optional first argument: "min" builds the RR_MINIMAL diagnostic variant.
+set "VARIANT=%~1"
+set "RRDEFS="
+set "RRNAME=RrSvc"
+if /i "%VARIANT%"=="min" (
+    set "RRDEFS=/DRR_MINIMAL"
+    set "RRNAME=RrSvc_min"
+)
+
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat" >nul
 if errorlevel 1 (
     echo [build.bat] vcvars64.bat introuvable ou en echec.
@@ -31,27 +40,27 @@ pushd "%~dp0.."
 if not exist "build_driver" mkdir "build_driver"
 
 echo [build.bat] kit %KITVER%
-echo [build.bat] cl driver\Source.cpp
+echo [build.bat] cl driver\Source.cpp (%RRNAME%)
 
-cl /nologo /kernel /GS- /GR- /O2 /W4 /std:c++17 /D_AMD64_ ^
+cl /nologo /kernel /GS- /GR- /O2 /W4 /std:c++17 /D_AMD64_ %RRDEFS% ^
    /I "%KMINC%" /I "%KMINC%\crt" /I "driver" ^
-   /c "driver\Source.cpp" /Fo"build_driver\RrSvc.obj"
+   /c "driver\Source.cpp" /Fo"build_driver\%RRNAME%.obj"
 if errorlevel 1 goto fail
 
-echo [build.bat] link RrSvc.sys
+echo [build.bat] link %RRNAME%.sys
 
 link /nologo /DRIVER /SUBSYSTEM:NATIVE /ENTRY:DriverEntry /NODEFAULTLIB ^
-   /LIBPATH:"%KMLIB%" /OUT:"build_driver\RrSvc.sys" ^
-   "build_driver\RrSvc.obj" ntoskrnl.lib
+   /LIBPATH:"%KMLIB%" /OUT:"build_driver\%RRNAME%.sys" ^
+   "build_driver\%RRNAME%.obj" ntoskrnl.lib
 if errorlevel 1 goto fail
 
-del /q "build_driver\RrSvc.obj"
-echo [build.bat] OK : build_driver\RrSvc.sys
+del /q "build_driver\%RRNAME%.obj"
+echo [build.bat] OK : build_driver\%RRNAME%.sys
 popd
 exit /b 0
 
 :fail
-del /q "build_driver\RrSvc.obj" 2>nul
+del /q "build_driver\%RRNAME%.obj" 2>nul
 echo [build.bat] ECHEC
 popd
 exit /b 1

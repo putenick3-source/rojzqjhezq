@@ -16,6 +16,7 @@
 #include <type_traits>
 
 #include "DriverClient.h"
+#include "Log.h"
 
 #pragma comment(lib, "psapi.lib")
 
@@ -34,13 +35,16 @@ public:
         detach();
 
         const DWORD pid = findPid(exeName);
+        diag::log(L"attach: findPid=%lu", pid);
         if (!pid) return false;
 
         pid_ = pid;
         // Kept even when the driver answers: VirtualQueryEx backs regions().
         handle_    = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
                                  FALSE, pid);
+        diag::log(L"attach: OpenProcess=%s", handle_ ? L"ok" : L"echec");
         useDriver_ = drv_.open(pid);
+        diag::log(L"attach: driver=%s", useDriver_ ? L"ok" : L"absent");
         if (!handle_ && !useDriver_) {
             detach();
             return false;
@@ -58,9 +62,13 @@ public:
                 moduleSize_ = size;
                 resolved    = true;
             }
+            diag::log(L"attach: moduleBase driver=%s base=0x%llX",
+                      resolved ? L"ok" : L"echec", (unsigned long long)moduleBase_);
         }
         if (!resolved && handle_) {
             resolved = resolveModule(anchor, moduleBase_, moduleSize_);
+            diag::log(L"attach: moduleBase rpm=%s base=0x%llX",
+                      resolved ? L"ok" : L"echec", (unsigned long long)moduleBase_);
         }
         if (!resolved) {
             detach();
@@ -125,9 +133,18 @@ public:
             reinterpret_cast<uintptr_t>(si.lpMaximumApplicationAddress);
 
         size_t total = 0;
+        diag::log(L"regions: debut min=0x%llX max=0x%llX budget=%zu handle=0x%llX",
+                  (unsigned long long)si.lpMinimumApplicationAddress,
+                  (unsigned long long)si.lpMaximumApplicationAddress,
+                  budget, (unsigned long long)handle_);
         while (cur < last) {
             MEMORY_BASIC_INFORMATION mbi{};
-            if (!VirtualQueryEx(handle_, (LPCVOID)cur, &mbi, sizeof(mbi))) break;
+            if (!VirtualQueryEx(handle_, (LPCVOID)cur, &mbi, sizeof(mbi))) {
+                diag::log(L"regions: VirtualQueryEx echec a 0x%llX err=%lu handle=0x%llX",
+                          (unsigned long long)cur, GetLastError(),
+                          (unsigned long long)handle_);
+                break;
+            }
 
             const uintptr_t base = reinterpret_cast<uintptr_t>(mbi.BaseAddress);
             if (mbi.State == MEM_COMMIT && readable(mbi.Protect)) {
@@ -144,6 +161,7 @@ public:
             if (next <= cur) break;
             cur = next;
         }
+        diag::log(L"regions: fin %zu region(s) %zu octet(s)", out.size(), total);
         return out;
     }
 

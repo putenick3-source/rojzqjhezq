@@ -4,13 +4,34 @@
 
 #include <algorithm>
 #include <cstring>
+#include <cwchar>
+#include <string>
 #include <vector>
+
+// The driver picks a random suffix per load; find the symlink by prefix.
+static std::wstring rr_find_symlink() {
+    std::vector<wchar_t> buf(1u << 16);
+    const DWORD n = QueryDosDeviceW(nullptr, buf.data(), (DWORD)buf.size());
+    if (!n) return {};
+
+    const wchar_t* p = buf.data();
+    while (*p) {
+        const size_t len = std::wcslen(p);
+        if (len > 3 && _wcsnicmp(p, RR_NAME_PREFIX, 3) == 0) return std::wstring(p, len);
+        p += len + 1;
+    }
+    return {};
+}
 
 bool DriverClient::open(DWORD pid) {
     close();
     if (!pid) return false;
 
-    HANDLE handle = CreateFileW(RR_SYMLINK_NAME, GENERIC_READ | GENERIC_WRITE,
+    const std::wstring link = rr_find_symlink();
+    if (link.empty()) return false;
+    const std::wstring path = L"\\\\.\\" + link;
+
+    HANDLE handle = CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                 OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (handle == INVALID_HANDLE_VALUE) return false;

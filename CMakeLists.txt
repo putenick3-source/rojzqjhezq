@@ -79,3 +79,16 @@ if(MSVC)
     set_property(TARGET RobRunOverlay PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
+
+# --- Minimal driver variant (RR_MINIMAL) --------------------------------------
+# The driver body lives outside CMake (WDK + MSVC via driver/build.bat). This
+# target drives that batch with its "min" variant so a RR_MINIMAL RrSvc_min.sys
+# is produced next to the normal RrSvc.sys, for detection bisection.
+file(TO_NATIVE_PATH "${CMAKE_SOURCE_DIR}/driver/build.bat" RR_BUILD_BAT)
+
+add_custom_target(RrSvc_min
+    COMMAND cmd /c "${RR_BUILD_BAT}" min
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    COMMENT "Build build_driver/RrSvc_min.sys (RR_MINIMAL)"
+    VERBATIM)
+

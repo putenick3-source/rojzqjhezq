@@ -1,0 +1,24 @@
+[+] Pass Allocation Ptr as first param enabled
+[+] Copying driver header enabled
+[<] Loading vulnerable driver, Name: tcLPChEDUZPDlGJDIQfQmbhs
+[+] NtLoadDriver Status 0x0
+[+] PiDDBLock Ptr 0xfffff8045e139edc
+[+] PiDDBCacheTable Ptr 0xfffff8045e13a018
+[+] PiDDBLock Locked
+[+] Found Table Entry = 0xFFFF9C01C7E494C0
+[+] PiDDBCacheTable Cleaned
+[+] g_KernelHashBucketList Found 0xFFFFF80461EF2090
+[+] g_HashCacheLock Locked
+[+] Found In g_KernelHashBucketList: tcLPChEDUZPDlGJDIQfQmbhs
+[+] g_KernelHashBucketList Cleaned
+[+] MmUnloadedDrivers Cleaned: tcLPChEDUZPDlGJDIQfQmbhs
+[+] WdFilter.sys not loaded, clear skipped
+[+] Image base has been allocated at 0xFFFFC683E8D74000
+[+] Load config directory wasn't found, probably StackCookie not defined, fix cookie skipped
+[<] Calling DriverEntry 0xFFFFC683E8D76320
+[+] Callback example called
+[+] DriverEntry returned 0x0
+[<] Unloading vulnerable driver
+[+] NtUnloadDriver Status 0x0
+[+] Vul driver data destroyed before unlink
+[+] success

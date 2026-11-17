@@ -1,0 +1,24 @@
+[+] Pass Allocation Ptr as first param enabled
+[+] Copying driver header enabled
+[<] Loading vulnerable driver, Name: DoWtZieqfZWgrrVXgvzZ
+[+] NtLoadDriver Status 0x0
+[+] PiDDBLock Ptr 0xfffff8057e339edc
+[+] PiDDBCacheTable Ptr 0xfffff8057e33a018
+[+] PiDDBLock Locked
+[+] Found Table Entry = 0xFFFFAA8FC31671C0
+[+] PiDDBCacheTable Cleaned
+[+] g_KernelHashBucketList Found 0xFFFFF805812F2090
+[+] g_HashCacheLock Locked
+[+] Found In g_KernelHashBucketList: DoWtZieqfZWgrrVXgvzZ
+[+] g_KernelHashBucketList Cleaned
+[+] MmUnloadedDrivers Cleaned: DoWtZieqfZWgrrVXgvzZ
+[+] WdFilter.sys not loaded, clear skipped
+[+] Image base has been allocated at 0xFFFFDC0320BCA000
+[+] Load config directory wasn't found, probably StackCookie not defined, fix cookie skipped
+[<] Calling DriverEntry 0xFFFFDC0320BCC100
+[+] Callback example called
+[+] DriverEntry returned 0x0
+[<] Unloading vulnerable driver
+[+] NtUnloadDriver Status 0x0
+[+] Vul driver data destroyed before unlink
+[+] success

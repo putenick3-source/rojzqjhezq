@@ -1,0 +1,6 @@
+!process ffffb30ea790f340 7
+dt nt!_EPROCESS ffffb30ea790f340 Peb Wow64Process SectionBaseAddress
+!process ffffb30ea7b38340 7
+dt nt!_EPROCESS ffffb30ea7b38340 Peb Wow64Process SectionBaseAddress
+q
+

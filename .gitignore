@@ -36,4 +36,18 @@ Makefile
 Thumbs.db
 .DS_Store
 
-tools/
+# Dumps de crash (les .txt d'analyse restent suivis)
+*.dmp
+
+# Sorties de build hors build_driver (cmake -A x64, IDE)
+x64/
+
+# tools/ : ignore en bloc, sauf les assistants de mapping et le mappeur kd2
+tools/*
+!tools/test_min.ps1
+!tools/test_kd2.ps1
+!tools/kd2/
+!tools/kd2/kd2.cfg
+!tools/kd2/kd2.exe
+tools/kd2/kernel-mode.sys
+

@@ -207,7 +207,8 @@ namespace {
 
         if (ImGui::Button("Chercher ViewProjection")) {
             size_t checked = 0;
-            const bool ok = scan::findViewProjection(proc, d.foundVp, kScanBudget, checked);
+            const std::vector<Process::Region> regions = proc.regions(kScanBudget);
+            const bool ok = scan::findViewProjection(proc, regions, d.foundVp, checked);
             d.vpCandidates = (int)checked;
             std::snprintf(d.status, sizeof(d.status),
                           "%s - %d candidat(s) teste(s)",
@@ -222,6 +223,12 @@ namespace {
                       (unsigned long long)sdk::off::kViewMatrix);
         }
         ImGui::EndDisabled();
+
+        ImGui::Separator();
+        if (ImGui::Button("Dump entites")) {
+            World::dumpEntities(proc);
+            std::snprintf(d.status, sizeof(d.status), "dump entites (voir log)");
+        }
     }
 
 }

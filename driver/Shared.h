@@ -21,8 +21,9 @@ typedef unsigned int     uint32_t;
 #include <cstdint>
 #endif
 
-#define RR_DEVICE_NAME  L"\\Device\\RrSvc94"
-#define RR_SYMLINK_NAME L"\\DosDevices\\RrSvc94"
+// Fixed prefix; the driver appends a per-load random suffix and the client
+// finds the symlink by scanning the DOS device directory.
+#define RR_NAME_PREFIX L"Xkq"
 
 #define RR_IOCTL_BATCH  CTL_CODE(FILE_DEVICE_UNKNOWN, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define RR_IOCTL_MODULE CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)

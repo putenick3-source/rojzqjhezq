@@ -7,6 +7,7 @@
 #pragma once
 #include "Process.h"
 #include "Projection.h"
+#include "Log.h"
 
 #include <algorithm>
 #include <cmath>
@@ -193,8 +194,9 @@ namespace scan {
 
     // Looks for a view-projection matrix: cheap row-3 norm prefilter, then full
     // validateProjection in both layouts. `checked` reports candidates tested.
-    inline bool findViewProjection(const Process& proc, Projection& out,
-                                   size_t budget, size_t& checked) {
+    inline bool findViewProjection(const Process& proc,
+                                   const std::vector<Process::Region>& regions,
+                                   Projection& out, size_t& checked) {
         checked = 0;
         if (!proc.isAttached()) return false;
 
@@ -204,22 +206,48 @@ namespace scan {
 
         std::vector<float> block(kBlock / sizeof(float));
 
-        for (const Process::Region& r : proc.regions(budget)) {
+        size_t blocksOk = 0;
+        size_t blocksFail = 0;
+        size_t bytesOk = 0;
+        size_t regionsSeen = 0;
+
+        for (const Process::Region& r : regions) {
+            ++regionsSeen;
+            if (regionsSeen <= 15) {
+                diag::log(L"projection: region %zu base=0x%llX size=0x%llX",
+                          regionsSeen, (unsigned long long)r.base,
+                          (unsigned long long)r.size);
+            }
+
             for (size_t off = 0; off < r.size; off += kBlock) {
                 const size_t floats =
                     std::min(block.size(), (r.size - off) / sizeof(float));
                 if (floats < kFloats) break;
                 if (!proc.readRaw(r.base + off, block.data(),
                                   floats * sizeof(float))) {
+                    ++blocksFail;
                     continue;
                 }
+                ++blocksOk;
+                bytesOk += floats * sizeof(float);
 
                 for (size_t i = 0; i + kFloats <= floats; i += kStep) {
-                    const float sx   = block[i + 3];
-                    const float sy   = block[i + 7];
-                    const float sz   = block[i + 11];
-                    const float norm = std::sqrt(sx * sx + sy * sy + sz * sz);
-                    if (!std::isfinite(norm) || norm < 0.8f || norm > 1.25f) continue;
+                    // validateProjection gates on the norm of row 3, which is the
+                    // 4th column of a column-major source. Test both so neither
+                    // layout is filtered out before validation.
+                    const float c3x = block[i + 3];
+                    const float c3y = block[i + 7];
+                    const float c3z = block[i + 11];
+                    const float r3x = block[i + 12];
+                    const float r3y = block[i + 13];
+                    const float r3z = block[i + 14];
+
+                    const float c3n = std::sqrt(c3x * c3x + c3y * c3y + c3z * c3z);
+                    const float r3n = std::sqrt(r3x * r3x + r3y * r3y + r3z * r3z);
+
+                    const bool colOk = std::isfinite(c3n) && c3n >= 0.6f && c3n <= 1.4f;
+                    const bool rowOk = std::isfinite(r3n) && r3n >= 0.6f && r3n <= 1.4f;
+                    if (!colOk && !rowOk) continue;
 
                     Mat4 raw{};
                     for (int rr = 0; rr < 4; ++rr) {
@@ -229,7 +257,6 @@ namespace scan {
                     }
 
                     ++checked;
-                    float residual = 1.0f;
                     for (Layout layout : { Layout::RowMajor, Layout::ColumnMajor }) {
                         Mat4 candidate{};
                         for (int rr = 0; rr < 4; ++rr) {
@@ -239,16 +266,23 @@ namespace scan {
                                     : raw.m[cc][rr];
                             }
                         }
+                        float residual = 1.0f;
                         if (!validateProjection(candidate, residual)) continue;
 
                         out.mat  = candidate;
                         out.addr = r.base + off + i * sizeof(float);
                         out.invalidate();
-                        return out.valid();
+                        if (!out.valid()) continue;
+
+                        diag::log(L"projection: trouvee a 0x%llX (%zu blocs, %zu regions, %zu candidats)",
+                                  (unsigned long long)out.addr, blocksOk, regionsSeen, checked);
+                        return true;
                     }
                 }
             }
         }
+        diag::log(L"projection: aucune (%zu blocs lus, %zu regions, %zu echecs, %zu octets, %zu candidats)",
+                  blocksOk, regionsSeen, blocksFail, bytesOk, checked);
         return false;
     }
 

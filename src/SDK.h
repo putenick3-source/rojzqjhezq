@@ -21,7 +21,7 @@ namespace sdk {
     // Build the offsets below were dumped against. Only the "major.minor.build"
     // prefix is compared, so revisions do not trip the guard. On mismatch the
     // ESP is cut until the INI has been re-dumped.
-    inline constexpr const wchar_t* kDumpedVersion = L"0.7.0";
+    inline constexpr const wchar_t* kDumpedVersion = L"6000.3.18";
 
     // ---- Module-relative offsets --------------------------------------------
     // Resolved as: GameAssembly.dll base + offset -> (optional pointer chain)
@@ -42,6 +42,9 @@ namespace sdk {
 
         // Game state / in-match flag — used to hide ESP on menu screens.
         inline uintptr_t kGameState     = 0x0;   // INI: GameState
+
+        // Optional BattleEntitiesModel anchor: static ptr -> BattleEntitiesModel*.
+        inline uintptr_t kEntitiesModel = 0x0;   // INI: EntitiesModel (empty = off)
     }
 
     // ---- Per-entity offsets (relative to an Entity* struct) -----------------
@@ -65,7 +68,38 @@ namespace sdk {
 
         // Optional head position (bone or head collider), relative to the Entity*.
         inline uintptr_t kHead          = 0x0;   // INI: Head          Vec3 head position
+
+        // IPrimitiveData indirection: entity -> CommonData/PrivateData -> holder
+        // -> value. Needed because position and health live behind wrappers.
+        inline uintptr_t kCommonData    = 0x20;  // INI: CommonData   Entity* + this -> CommonData*
+        inline uintptr_t kPrivateData   = 0x28;  // INI: PrivateData  Entity* + this -> PrivateData*
+        inline uintptr_t kPrimValue     = 0x10;  // INI: PrimValue    holder* + this -> value
     }
+
+    // ---- BattleEntitiesModel graph + IL2CPP dictionary layout ---------------
+    // Field offsets inside the BattleEntitiesModel object, reached through the
+    // EntitiesModel anchor above.
+    namespace bem {
+        inline uintptr_t kEntitiesModels   = 0x50;  // _models Dictionary*
+        inline uintptr_t kEntitiesView     = 0xE0;
+        inline uintptr_t kLocalPlayer      = 0xD0;
+        inline uintptr_t kVehiclesModel    = 0x88;
+        inline uintptr_t kLocationEntities = 0x48;
+        inline uintptr_t kCharacterSlots   = 0x80;
+    }
+
+    // IL2CPP Dictionary layout behind _models: entry array pointer, count, and
+    // the entry stride / value slot (data follows the Il2CppArray header).
+    namespace dict {
+        inline uintptr_t kDictEntries  = 0x18;  // Dictionary* + this -> Entry[]
+        inline uintptr_t kDictCount    = 0x20;  // Dictionary* + this -> int
+        inline uintptr_t kArrayData    = 0x20;  // Il2CppArray* + this -> first Entry
+        inline constexpr size_t kEntrySize = 24;
+        inline uintptr_t kEntryValue   = 0x10;  // Entry + this -> object*
+    }
+
+    // Il2CppClass::name, read as klass + kIl2CppKlassName -> char*.
+    inline uintptr_t kIl2CppKlassName = 0x10;
 
     // Entity list stride — size of each pointer slot. Usually sizeof(void*) = 8.
     inline constexpr size_t kEntityStride = sizeof(void*);

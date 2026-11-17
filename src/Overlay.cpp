@@ -198,9 +198,21 @@ void Overlay::setInteractive(bool on) {
     interactive_ = on;
 
     LONG_PTR ex = GetWindowLongPtrW(hwnd_, GWL_EXSTYLE);
-    if (on) ex &= ~WS_EX_TRANSPARENT;
-    else    ex |=  WS_EX_TRANSPARENT;
+    if (on) {
+        // Interactive: clickable and focusable so ImGui receives WM_CHAR.
+        ex &= ~(WS_EX_TRANSPARENT | WS_EX_NOACTIVATE);
+    } else {
+        ex |= (WS_EX_TRANSPARENT | WS_EX_NOACTIVATE);
+    }
     SetWindowLongPtrW(hwnd_, GWL_EXSTYLE, ex);
+
+    if (on) {
+        SetForegroundWindow(hwnd_);
+        SetFocus(hwnd_);
+    } else if (target_ && IsWindow(target_)) {
+        // Hand the keyboard back so the game keeps its input.
+        SetForegroundWindow(target_);
+    }
 }
 
 bool Overlay::beginFrame() {

@@ -17,6 +17,16 @@
 // usable on every kernel the overlay targets.
 #pragma warning(disable : 4996)
 
+// Diagnostic build switch (CMake target RrSvc_min / build.bat min). When
+// defined the entry point stops as soon as the driver object is in place: no
+// device, no symlink, no staging, no IOCTL wiring.
+#ifndef RR_MINIMAL
+#define RR_MINIMAL 0
+#endif
+
+// RUNTIME_FUNCTION lives in winnt.h, which the km headers do not pull in.
+typedef IMAGE_RUNTIME_FUNCTION_ENTRY RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
+
 // Exported by ntoskrnl but missing from the current km headers.
 extern "C" NTSTATUS NTAPI MmCopyVirtualMemory(
     PEPROCESS fromProcess, PVOID fromAddress,
@@ -24,6 +34,9 @@ extern "C" NTSTATUS NTAPI MmCopyVirtualMemory(
     SIZE_T bufferSize, KPROCESSOR_MODE previousMode, PSIZE_T returnSize);
 extern "C" PVOID NTAPI RtlPcToFileHeader(PVOID pcValue, PVOID* baseOfImage);
 extern "C" PVOID NTAPI PsGetProcessPeb(PEPROCESS process);
+
+// Exporte par ntoskrnl, absent des en-tetes km de ce kit.
+extern "C" NTSTATUS NTAPI IoCreateDriver(PUNICODE_STRING name, PDRIVER_INITIALIZE entry);
 
 // MmAllocateIndependentPages is exported on most kernels but not all; resolved
 // at init so an import stub cannot fail the mapping on the others.
@@ -39,6 +52,40 @@ static PDEVICE_OBJECT g_Device = nullptr;
 static ULONG          g_TimeDateStamp = 0;
 static RR_ALLOC_INDEP g_AllocIndep = nullptr;
 static RR_FREE_INDEP  g_FreeIndep = nullptr;
+
+static WCHAR g_DeviceName[64];
+static WCHAR g_SymlinkName[64];
+
+// Device and symlink names are built per load: the prefix stays stable so the
+// client can locate the symlink, the suffix never repeats across boots.
+static void rr_build_names(void) {
+    static const WCHAR kAlphabet[] = L"abcdefghijklmnopqrstuvwxyz0123456789";
+    static const WCHAR kDevPrefix[] = L"\\Device\\" RR_NAME_PREFIX;
+    static const WCHAR kLinkPrefix[] = L"\\DosDevices\\" RR_NAME_PREFIX;
+
+    WCHAR suffix[9];
+    ULONG64 v = (ULONG64)(ULONG_PTR)&rr_build_names ^ ((ULONG64)g_TimeDateStamp << 16);
+    for (ULONG i = 0; i < 8; ++i) {
+        suffix[i] = kAlphabet[(ULONG)(v % 36)];
+        v /= 36;
+    }
+    suffix[8] = 0;
+
+    ULONG i = 0;
+    ULONG j = 0;
+    while (kDevPrefix[i]) { g_DeviceName[i] = kDevPrefix[i]; ++i; }
+    while (suffix[j]) { g_DeviceName[i++] = suffix[j++]; }
+    g_DeviceName[i] = 0;
+
+    i = 0;
+    j = 0;
+    while (kLinkPrefix[i]) { g_SymlinkName[i] = kLinkPrefix[i]; ++i; }
+    while (suffix[j]) { g_SymlinkName[i++] = suffix[j++]; }
+    g_SymlinkName[i] = 0;
+}
+static PVOID             g_ImageBase = nullptr;
+static PRUNTIME_FUNCTION g_FnTable = nullptr;
+static ULONG             g_FnCount = 0;
 
 // PEB->Ldr offset of the 64-bit PEB.
 static const ULONG kPebLdr = 0x18;
@@ -364,8 +411,6 @@ static void rr_clean_traces(PDRIVER_OBJECT drv) {
     __try { rr_clean_hash(); } __except (EXCEPTION_EXECUTE_HANDLER) {}
     __try { rr_clean_piddb(); } __except (EXCEPTION_EXECUTE_HANDLER) {}
     __try { rr_clean_unloaded(); } __except (EXCEPTION_EXECUTE_HANDLER) {}
-
-    drv->DriverUnload = nullptr;
 }
 
 // ---- IOCTL workers ----------------------------------------------------------
@@ -426,6 +471,16 @@ static NTSTATUS rr_do_batch(PVOID input, ULONG inLen,
     return result;
 }
 
+// The target's user pages are not mapped in the caller's context, so every read
+// of its structures goes through MmCopyVirtualMemory into a local copy.
+static NTSTATUS rr_copy_proc(PEPROCESS target, PVOID address, PVOID local, SIZE_T size) {
+    SIZE_T copied = 0;
+    const NTSTATUS status = MmCopyVirtualMemory(target, address, PsGetCurrentProcess(),
+                                                local, size, KernelMode, &copied);
+    if (!NT_SUCCESS(status)) return status;
+    return copied == size ? STATUS_SUCCESS : STATUS_PARTIAL_COPY;
+}
+
 static UNICODE_STRING rr_module_name(const RrModuleRequest* req) {
     UNICODE_STRING name;
     ULONG len = rr_len_w(req->name, RTL_NUMBER_OF(req->name) - 1);
@@ -457,28 +512,55 @@ static NTSTATUS rr_do_module(PVOID input, ULONG inLen,
 
     __try {
         PVOID peb = PsGetProcessPeb(target);
-        RR_PEB_LDR_DATA* ldr =
-            peb ? *(RR_PEB_LDR_DATA**)((PUCHAR)peb + kPebLdr) : nullptr;
-
-        if (!ldr) {
+        if (!peb) {
             status = STATUS_NOT_FOUND;
         } else {
-            const UNICODE_STRING wanted = rr_module_name(&req);
-            LIST_ENTRY* head = &ldr->InLoadOrderModuleList;
-            LIST_ENTRY* cur = head->Flink;
-            ULONG guard = 0x200;
+            PVOID ldr = nullptr;
+            status = rr_copy_proc(target, (PUCHAR)peb + kPebLdr, &ldr, sizeof(ldr));
+            if (NT_SUCCESS(status) && ldr) {
+                const UNICODE_STRING wanted = rr_module_name(&req);
+                ULONG64 head = (ULONG64)ldr +
+                               FIELD_OFFSET(RR_PEB_LDR_DATA, InLoadOrderModuleList);
 
-            status = STATUS_NOT_FOUND;
-            while (cur && cur != head && guard--) {
-                RR_LDR_ENTRY* entry = (RR_LDR_ENTRY*)cur;
-                if (entry->DllBase &&
-                    RtlEqualUnicodeString(&wanted, &entry->BaseDllName, TRUE)) {
-                    reply.base = (ULONG64)entry->DllBase;
-                    reply.size = entry->SizeOfImage;
-                    status = STATUS_SUCCESS;
-                    break;
+                LIST_ENTRY link;
+                status = rr_copy_proc(target, (PVOID)head, &link, sizeof(link));
+                ULONG64 cur = NT_SUCCESS(status) ? (ULONG64)link.Flink : 0;
+                ULONG guard = 0x200;
+                status = STATUS_NOT_FOUND;
+
+                while (cur && cur != head && guard--) {
+                    RR_LDR_ENTRY entry;
+                    rr_zero(&entry, sizeof(entry));
+                    if (!NT_SUCCESS(rr_copy_proc(target, (PVOID)cur, &entry, sizeof(entry)))) {
+                        break;
+                    }
+
+                    if (entry.DllBase && entry.BaseDllName.Buffer &&
+                        entry.BaseDllName.Length >= sizeof(wchar_t)) {
+                        wchar_t nameBuf[64] = { 0 };
+                        ULONG chars = entry.BaseDllName.Length / sizeof(wchar_t);
+                        if (chars > RTL_NUMBER_OF(nameBuf) - 1) {
+                            chars = RTL_NUMBER_OF(nameBuf) - 1;
+                        }
+
+                        if (NT_SUCCESS(rr_copy_proc(target, entry.BaseDllName.Buffer,
+                                                    nameBuf, chars * sizeof(wchar_t)))) {
+                            UNICODE_STRING found;
+                            found.Buffer = nameBuf;
+                            found.Length = (USHORT)(chars * sizeof(wchar_t));
+                            found.MaximumLength = (USHORT)sizeof(nameBuf);
+
+                            if (RtlEqualUnicodeString(&wanted, &found, TRUE)) {
+                                reply.base = (ULONG64)entry.DllBase;
+                                reply.size = entry.SizeOfImage;
+                                status = STATUS_SUCCESS;
+                                break;
+                            }
+                        }
+                    }
+
+                    cur = (ULONG64)entry.InLoadOrderLinks.Flink;
                 }
-                cur = cur->Flink;
             }
         }
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -537,7 +619,7 @@ static VOID rr_unload(PDRIVER_OBJECT drv) {
 
     if (g_Device) {
         UNICODE_STRING link;
-        RtlInitUnicodeString(&link, RR_SYMLINK_NAME);
+        RtlInitUnicodeString(&link, g_SymlinkName);
         IoDeleteSymbolicLink(&link);
         IoDeleteDevice(g_Device);
         g_Device = nullptr;
@@ -578,13 +660,55 @@ static PVOID rr_alloc_staging(void) {
     return ExAllocatePoolWithTag(NonPagedPool, RR_STAGING, '94sR');
 }
 
-static ULONG rr_capture_stamp(PDRIVER_OBJECT drv) {
+// kdmapper calls the entry with (param1, param2), never with a DRIVER_OBJECT.
+// With --PassAllocationPtr param1 is the image base; an image base is not a
+// driver object, so the Type/Size pair discriminates the two cases.
+static BOOLEAN rr_is_driver_object(PVOID p) {
+    if (!p) return FALSE;
+    __try {
+        PDRIVER_OBJECT o = (PDRIVER_OBJECT)p;
+        return o->Type == IO_TYPE_DRIVER && o->Size >= sizeof(DRIVER_OBJECT);
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        return FALSE;
+    }
+}
+
+// Prepare la table de fonctions (.pdata) du module mappe, sans l'enregistrer
+// pour l'instant : tant qu'elle n'est pas enregistree, les __try/__except de ce
+// fichier restent inertes.
+static BOOLEAN rr_register_exceptions(PVOID imageBase) {
+    if (!imageBase) return FALSE;
+    __try {
+        PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)imageBase;
+        if (dos->e_magic != IMAGE_DOS_SIGNATURE) return FALSE;
+        PIMAGE_NT_HEADERS nt =
+            (PIMAGE_NT_HEADERS)((PUCHAR)imageBase + dos->e_lfanew);
+        if (nt->Signature != IMAGE_NT_SIGNATURE) return FALSE;
+
+        const ULONG rva =
+            nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION].VirtualAddress;
+        const ULONG size =
+            nt->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION].Size;
+        if (!rva || size < sizeof(RUNTIME_FUNCTION)) return FALSE;
+
+        g_FnTable = (PRUNTIME_FUNCTION)((PUCHAR)imageBase + rva);
+        g_FnCount = size / sizeof(RUNTIME_FUNCTION);
+        // Kernel equivalent is not exported: the dynamic function table path
+        // (RtlInsertDynamicFunctionTable) has to be pattern-scanned, and the
+        // KLDR entry route is deferred. Until then __try/__except stays inert.
+        return FALSE;
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+        return FALSE;
+    }
+}
+
+static ULONG rr_capture_stamp(PVOID imageBase) {
     ULONG stamp = 0;
     __try {
-        if (drv->DriverStart && drv->DriverSize >= 0x40) {
-            PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)drv->DriverStart;
+        if (imageBase) {
+            PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)imageBase;
             PIMAGE_NT_HEADERS nt =
-                (PIMAGE_NT_HEADERS)((PUCHAR)drv->DriverStart + dos->e_lfanew);
+                (PIMAGE_NT_HEADERS)((PUCHAR)imageBase + dos->e_lfanew);
             stamp = nt->FileHeader.TimeDateStamp;
         }
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -593,20 +717,39 @@ static ULONG rr_capture_stamp(PDRIVER_OBJECT drv) {
     return stamp;
 }
 
-// Nothing may read the PE headers after this call.
-static void rr_drop_headers(PDRIVER_OBJECT drv) {
-    if (!drv->DriverStart || !drv->DriverSize) return;
-    SIZE_T len = drv->DriverSize < 0x400 ? drv->DriverSize : 0x400;
-    rr_zero(drv->DriverStart, len);
+// Header pages of a manually mapped image can be read-only (kdmapper --indPages
+// maps through MmAllocateIndependentPages); a write fault here must not kill
+// DriverEntry, so the scrub is trapped and stays best effort.
+static void rr_drop_headers(PVOID imageBase) {
+    if (!imageBase) return;
+    __try {
+        rr_zero(imageBase, 0x400);
+    } __except (EXCEPTION_EXECUTE_HANDLER) {
+    }
 }
 
 extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT drv, PUNICODE_STRING path) {
     UNREFERENCED_PARAMETER(path);
 
-    g_TimeDateStamp = rr_capture_stamp(drv);
+    if (!rr_is_driver_object(drv)) {
+        g_ImageBase = (PVOID)drv;
+        return IoCreateDriver(nullptr, DriverEntry);
+    }
 
+#if RR_MINIMAL
+    // Minimal variant: the object is in place, nothing else happens. No device,
+    // no symlink, no staging, no IOCTL handlers, no header scrub.
+    UNREFERENCED_PARAMETER(drv);
+    return STATUS_SUCCESS;
+#else
+    if (!g_ImageBase) g_ImageBase = drv->DriverStart;
+
+    rr_register_exceptions(g_ImageBase);
+    g_TimeDateStamp = rr_capture_stamp(g_ImageBase);
+
+    rr_build_names();
     UNICODE_STRING deviceName;
-    RtlInitUnicodeString(&deviceName, RR_DEVICE_NAME);
+    RtlInitUnicodeString(&deviceName, g_DeviceName);
 
     PDEVICE_OBJECT device = nullptr;
     NTSTATUS status = IoCreateDevice(drv, 0, &deviceName, FILE_DEVICE_UNKNOWN,
@@ -617,7 +760,7 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT drv, PUNICODE_STRING path) {
     g_Device = device;
 
     UNICODE_STRING link;
-    RtlInitUnicodeString(&link, RR_SYMLINK_NAME);
+    RtlInitUnicodeString(&link, g_SymlinkName);
     status = IoCreateSymbolicLink(&link, &deviceName);
     if (!NT_SUCCESS(status)) {
         IoDeleteDevice(device);
@@ -638,7 +781,14 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT drv, PUNICODE_STRING path) {
     drv->MajorFunction[IRP_MJ_DEVICE_CONTROL] = rr_control;
     drv->DriverUnload = rr_unload;
 
-    rr_drop_headers(drv);
+    // The I/O manager clears this automatically only for a DriverEntry reached
+    // through the normal loader path; here it comes from IoCreateDriver, so the
+    // device would stay unpublishable forever.
+    device->Flags &= ~DO_DEVICE_INITIALIZING;
+
+    // Best effort: nothing may read the PE headers after this call.
+    rr_drop_headers(g_ImageBase);
     return STATUS_SUCCESS;
+#endif
 }
 

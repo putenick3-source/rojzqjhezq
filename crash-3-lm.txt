@@ -1,0 +1,286 @@
+Opened log file 'C:\Users\noi\Downloads\rojzqjhezq\crash-3-lm.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+   EnableRedirectToChakraJsProvider : false
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.016 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 30
+
+Microsoft (R) Windows Debugger Version 10.0.28000.3231 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\noi\Downloads\rojzqjhezq\crash-3.dmp]
+Mini Kernel Dump File: Only registers and stack trace are available
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*C:\symbols*https://msdl.microsoft.com/download/symbols
+Symbol search path is: srv*C:\symbols*https://msdl.microsoft.com/download/symbols
+Executable search path is: 
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'
+Windows 10 Kernel Version 19041 MP (12 procs) Free x64
+Product: WinNt, suite: TerminalServer SingleUserTS
+Edition build lab: 19041.1.amd64fre.vb_release.191206-1406
+Kernel base = 0xfffff803`78c00000 PsLoadedModuleList = 0xfffff803`7982a420
+Debug session time: Tue Nov 17 18:33:50.596 2026 (UTC + 1:00)
+System Uptime: 0 days 0:01:49.241
+Loading Kernel Symbols
+...............................................................
+................................................................
+................................................................
+..
+Loading User Symbols
+PEB is paged out (Peb.Ldr = 00000000`0029a018).  Type ".hh dbgerr001" for details
+Loading unloaded module list
+.........
+For analysis of this file, run !analyze -v
+2: kd> lm; q
+start             end                 module name
+fffff41d`e9200000 fffff41d`e94d6000   win32kbase   (deferred)             
+fffff41d`e94e0000 fffff41d`e9894000   win32kfull   (deferred)             
+fffff41d`e98a0000 fffff41d`e98e9000   cdd        (deferred)             
+fffff41d`e9e30000 fffff41d`e9ecb000   win32k     (deferred)             
+fffff803`74a20000 fffff803`74a26000   hal        (deferred)             
+fffff803`74a30000 fffff803`74a3b000   kd         (deferred)             
+fffff803`74a40000 fffff803`74a69000   tm         (deferred)             
+fffff803`74a70000 fffff803`74ade000   CLFS       (deferred)             
+fffff803`74ae0000 fffff803`74afa000   PSHED      (deferred)             
+fffff803`74b00000 fffff803`74b0b000   BOOTVID    (deferred)             
+fffff803`74b10000 fffff803`74b3c000   ksecdd     (deferred)             
+fffff803`74b40000 fffff803`74b50000   cmimcext   (deferred)             
+fffff803`78c00000 fffff803`79c46000   nt         (pdb symbols)          c:\symbols\ntkrnlmp.pdb\F57E740B088E5056E8AF0772F1CC5BEB1\ntkrnlmp.pdb
+fffff803`7a400000 fffff803`7a517000   clipsp     (deferred)             
+fffff803`7a520000 fffff803`7a58d000   FLTMGR     (deferred)             
+fffff803`7a590000 fffff803`7a5f2000   msrpc      (deferred)             
+fffff803`7a600000 fffff803`7a611000   werkernel   (deferred)             
+fffff803`7a620000 fffff803`7a62c000   ntosext    (deferred)             
+fffff803`7a630000 fffff803`7a71c000   CI         (deferred)             
+fffff803`7a720000 fffff803`7a7db000   cng        (deferred)             
+fffff803`7a7e0000 fffff803`7a8b1000   Wdf01000   (deferred)             
+fffff803`7a8c0000 fffff803`7a8d3000   WDFLDR     (deferred)             
+fffff803`7a8e0000 fffff803`7a8ef000   SleepStudyHelper   (deferred)             
+fffff803`7a8f0000 fffff803`7a901000   WppRecorder   (deferred)             
+fffff803`7a910000 fffff803`7a936000   acpiex     (deferred)             
+fffff803`7a940000 fffff803`7a94e000   msseccore   (deferred)             
+fffff803`7a950000 fffff803`7aa1c000   ACPI       (deferred)             
+fffff803`7aa20000 fffff803`7aa2c000   WMILIB     (deferred)             
+fffff803`7aa50000 fffff803`7aabb000   intelpep   (deferred)             
+fffff803`7aac0000 fffff803`7aad8000   WindowsTrustedRT   (deferred)             
+fffff803`7aae0000 fffff803`7aaeb000   IntelTA    (deferred)             
+fffff803`7aaf0000 fffff803`7aafb000   WindowsTrustedRTProxy   (deferred)             
+fffff803`7ab00000 fffff803`7ab14000   pcw        (deferred)             
+fffff803`7ab20000 fffff803`7ab2b000   msisadrv   (deferred)             
+fffff803`7ab30000 fffff803`7aba7000   pci        (deferred)             
+fffff803`7abb0000 fffff803`7abc5000   vdrvroot   (deferred)             
+fffff803`7abd0000 fffff803`7abe9000   CEA        (deferred)             
+fffff803`7abf0000 fffff803`7abfd000   Fs_Rec     (deferred)             
+fffff803`7ac00000 fffff803`7ac30000   pdc        (deferred)             
+fffff803`7ac40000 fffff803`7ac71000   partmgr    (deferred)             
+fffff803`7ac80000 fffff803`7ad2b000   spaceport   (deferred)             
+fffff803`7ad30000 fffff803`7ad49000   volmgr     (deferred)             
+fffff803`7ad50000 fffff803`7adb3000   volmgrx    (deferred)             
+fffff803`7adc0000 fffff803`7adde000   mountmgr   (deferred)             
+fffff803`7ade0000 fffff803`7ae12000   storahci   (deferred)             
+fffff803`7ae20000 fffff803`7aed5000   storport   (deferred)             
+fffff803`7aee0000 fffff803`7af0f000   stornvme   (deferred)             
+fffff803`7af10000 fffff803`7af2c000   EhStorClass   (deferred)             
+fffff803`7af30000 fffff803`7af4a000   fileinfo   (deferred)             
+fffff803`7af50000 fffff803`7af90000   Wof        (deferred)             
+fffff803`7afa0000 fffff803`7b277000   Ntfs       (deferred)             
+fffff803`7b280000 fffff803`7b3f0000   ndis       (deferred)             
+fffff803`7b400000 fffff803`7b49c000   NETIO      (deferred)             
+fffff803`7b4a0000 fffff803`7b4d4000   ksecpkg    (deferred)             
+fffff803`7b4e0000 fffff803`7b7cc000   tcpip      (deferred)             
+fffff803`7b7d0000 fffff803`7b84f000   fwpkclnt   (deferred)             
+fffff803`7b850000 fffff803`7b880000   wfplwfs    (deferred)             
+fffff803`7b890000 fffff803`7b8a0000   VmsProxy   (deferred)             
+fffff803`7b8b0000 fffff803`7b8d6000   vmbkmclr   (deferred)             
+fffff803`7b8e0000 fffff803`7b8ef000   VmsProxyHNic   (deferred)             
+fffff803`7b8f0000 fffff803`7b9bb000   fvevol     (deferred)             
+fffff803`7b9c0000 fffff803`7b9cb000   volume     (deferred)             
+fffff803`7b9d0000 fffff803`7ba3d000   volsnap    (deferred)             
+fffff803`7ba40000 fffff803`7ba90000   rdyboost   (deferred)             
+fffff803`7baa0000 fffff803`7bac6000   mup        (deferred)             
+fffff803`7bad0000 fffff803`7bae2000   iorate     (deferred)             
+fffff803`7bb10000 fffff803`7bb2d000   disk       (deferred)             
+fffff803`7bb30000 fffff803`7bba2000   CLASSPNP   (deferred)             
+fffff803`92600000 fffff803`929ac000   dxgkrnl    (deferred)             
+fffff803`929b0000 fffff803`929c8000   watchdog   (deferred)             
+fffff803`929d0000 fffff803`929e6000   BasicDisplay   (deferred)             
+fffff803`929f0000 fffff803`92a02000   BasicRender   (deferred)             
+fffff803`92a10000 fffff803`92a2c000   Npfs       (deferred)             
+fffff803`92a50000 fffff803`92a6e000   crashdmp   (deferred)             
+fffff803`92b30000 fffff803`92b60000   cdrom      (deferred)             
+fffff803`92b70000 fffff803`92b85000   filecrypt   (deferred)             
+fffff803`92b90000 fffff803`92b9e000   tbs        (deferred)             
+fffff803`92ba0000 fffff803`92bbd000   UCPD       (deferred)             
+fffff803`92bc0000 fffff803`92bca000   Null       (deferred)             
+fffff803`92bd0000 fffff803`92bda000   Beep       (deferred)             
+fffff803`92be0000 fffff803`92bf1000   Msfs       (deferred)             
+fffff803`93e00000 fffff803`93f7d000   vfpext     (deferred)             
+fffff803`93f80000 fffff803`93fab000   pacer      (deferred)             
+fffff803`93fb0000 fffff803`93fc4000   ndiscap    (deferred)             
+fffff803`93fd0000 fffff803`94071000   Vid        (deferred)             
+fffff803`94080000 fffff803`940a2000   winhvr     (deferred)             
+fffff803`940b0000 fffff803`9412c000   rdbss      (deferred)             
+fffff803`94130000 fffff803`941c5000   csc        (deferred)             
+fffff803`941d0000 fffff803`94210000   ViGEmBus   (deferred)             
+fffff803`94220000 fffff803`94232000   nsiproxy   (deferred)             
+fffff803`94240000 fffff803`9424e000   npsvctrig   (deferred)             
+fffff803`94250000 fffff803`94260000   mssmbios   (deferred)             
+fffff803`94270000 fffff803`9427a000   gpuenergydrv   (deferred)             
+fffff803`94280000 fffff803`942ac000   dfsc       (deferred)             
+fffff803`942b0000 fffff803`942c6000   SteelSeries_Sonar_VAD   (deferred)             
+fffff803`942d0000 fffff803`9433d000   fastfat    (deferred)             
+fffff803`94340000 fffff803`94392000   ahcache    (deferred)             
+fffff803`943a0000 fffff803`943bd000   PawnIO     (deferred)             
+fffff803`943c0000 fffff803`94408000   vmbusr     (deferred)             
+fffff803`94410000 fffff803`9443c000   hvsocket   (deferred)             
+fffff803`94440000 fffff803`946b0000   vmswitch   (deferred)             
+fffff803`946c0000 fffff803`946d2000   CompositeBus   (deferred)             
+fffff803`946e0000 fffff803`946f5000   umbus      (deferred)             
+fffff803`94700000 fffff803`94722000   iaLPSS2_GPIO2_ADL   (deferred)             
+fffff803`94730000 fffff803`94763000   msgpioclx   (deferred)             
+fffff803`94770000 fffff803`947b2000   intelppm   (deferred)             
+fffff803`947c0000 fffff803`947f7000   vpcivsp    (deferred)             
+fffff803`94800000 fffff803`94834000   storvsp    (deferred)             
+fffff803`94840000 fffff803`94851000   ksthunk    (deferred)             
+fffff803`94860000 fffff803`94869000   Synth3dVsp   (deferred)             
+fffff803`94870000 fffff803`9487d000   NdisVirtualBus   (deferred)             
+fffff803`94880000 fffff803`9488c000   swenum     (deferred)             
+fffff803`94890000 fffff803`948ae000   CimFS      (deferred)             
+fffff803`948b0000 fffff803`948cc000   netfilter   (deferred)             
+fffff803`948d0000 fffff803`948e5000   afunix     (deferred)             
+fffff803`948f0000 fffff803`94997000   afd        (deferred)             
+fffff803`949a0000 fffff803`949b0000   TDI        (deferred)             
+fffff803`949c0000 fffff803`949da000   vwififlt   (deferred)             
+fffff803`949e0000 fffff803`949ef000   ssdevfactory   (deferred)             
+fffff803`949f0000 fffff803`949fe000   rdpbus     (deferred)             
+fffff803`aa600000 fffff803`aa69d000   USBXHCI    (deferred)             
+fffff803`aa6a0000 fffff803`aa6e4000   ucx01000   (deferred)             
+fffff803`aa6f0000 fffff803`aa740000   TeeDriverW10x64   (deferred)             
+fffff803`aa750000 fffff803`aa76c000   serial     (deferred)             
+fffff803`aa770000 fffff803`aa77f000   serenum    (deferred)             
+fffff803`aa780000 fffff803`aa818000   e1d        (deferred)             
+fffff803`aa820000 fffff803`aa82c000   wmiacpi    (deferred)             
+fffff803`aa830000 fffff803`aa83c000   acpitime   (deferred)             
+fffff803`aa840000 fffff803`aa84b000   acpipagr   (deferred)             
+fffff803`aa850000 fffff803`b0a61000   nvlddmkm   (deferred)             
+fffff803`b0a70000 fffff803`b0a95000   HDAudBus   (deferred)             
+fffff803`b0aa0000 fffff803`b0b06000   portcls    (deferred)             
+fffff803`b0b10000 fffff803`b0b31000   drmk       (deferred)             
+fffff803`b0b40000 fffff803`b0bb7000   ks         (deferred)             
+fffff803`b0bc0000 fffff803`b0bd6000   gna        (deferred)             
+fffff803`b0be0000 fffff803`b0bee000   UEFI       (deferred)             
+fffff803`b0bf0000 fffff803`b0bff000   nvvad64v   (deferred)             
+fffff803`ba000000 fffff803`ba013000   mouclass   (deferred)             
+fffff803`ba020000 fffff803`ba031000   kbdhid     (deferred)             
+fffff803`ba040000 fffff803`ba054000   kbdclass   (deferred)             
+fffff803`ba060000 fffff803`ba098000   usbaudio   (deferred)             
+fffff803`ba0b0000 fffff803`ba0bf000   dump_dumpstorport   (deferred)             
+fffff803`ba0f0000 fffff803`ba11f000   dump_stornvme   (deferred)             
+fffff803`ba140000 fffff803`ba15d000   dump_dumpfve   (deferred)             
+fffff803`ba160000 fffff803`ba23f000   dxgmms2    (deferred)             
+fffff803`ba240000 fffff803`ba25b000   monitor    (deferred)             
+fffff803`ba260000 fffff803`ba27e000   hvservice   (deferred)             
+fffff803`ba2b0000 fffff803`ba2e7000   wcifs      (deferred)             
+fffff803`ba2f0000 fffff803`ba373000   cldflt     (deferred)             
+fffff803`ba380000 fffff803`ba39a000   storqosflt   (deferred)             
+fffff803`ba3a0000 fffff803`ba3c7000   bindflt    (deferred)             
+fffff803`ba3d0000 fffff803`ba3dd000   rdpvideominiport   (deferred)             
+fffff803`ba3e0000 fffff803`ba40f000   rdpdr      (deferred)             
+fffff803`ba410000 fffff803`ba437000   tsusbhub   (deferred)             
+fffff803`ba440000 fffff803`ba465000   bowser     (deferred)             
+fffff803`ba470000 fffff803`ba4c6000   msquic     (deferred)             
+fffff803`ba4d0000 fffff803`ba565000   mrxsmb     (deferred)             
+fffff803`ba570000 fffff803`ba5b6000   mrxsmb20   (deferred)             
+fffff803`ba5c0000 fffff803`ba5d8000   mslldp     (deferred)             
+fffff803`ba5e0000 fffff803`ba5f2000   condrv     (deferred)             
+fffff803`ba600000 fffff803`ba618000   lltdio     (deferred)             
+fffff803`ba620000 fffff803`ba63b000   rspndr     (deferred)             
+fffff803`ba640000 fffff803`ba65d000   wanarp     (deferred)             
+fffff803`ba7b0000 fffff803`ba853000   UsbHub3    (deferred)             
+fffff803`ba860000 fffff803`ba86e000   USBD       (deferred)             
+fffff803`ba870000 fffff803`ba892000   nvhda64v   (deferred)             
+fffff803`ba8a0000 fffff803`ba90f000   HdAudio    (deferred)             
+fffff803`ba910000 fffff803`ba944000   usbccgp    (deferred)             
+fffff803`ba950000 fffff803`ba962000   hidusb     (deferred)             
+fffff803`ba970000 fffff803`ba9b1000   HIDCLASS   (deferred)             
+fffff803`ba9c0000 fffff803`ba9d3000   HIDPARSE   (deferred)             
+fffff803`ba9e0000 fffff803`ba9f0000   mouhid     (deferred)             
+fffff803`e3e00000 fffff803`e3e65000   googledrivefs32452   (deferred)             
+fffff803`e3e70000 fffff803`e3ec8000   srvnet     (deferred)             
+fffff803`e3ed0000 fffff803`e3ee4000   mmcss      (deferred)             
+fffff803`e3ef0000 fffff803`e3f05000   tcpipreg   (deferred)             
+fffff803`e3f10000 fffff803`e3fe6000   peauth     (deferred)             
+fffff803`e3ff0000 fffff803`e40bb000   srv2       (deferred)             
+fffff803`e40c0000 fffff803`e40dd000   rassstp    (deferred)             
+fffff803`e40e0000 fffff803`e40fd000   NDProxy    (deferred)             
+fffff803`e4100000 fffff803`e4128000   AgileVpn   (deferred)             
+fffff803`e4130000 fffff803`e4151000   rasl2tp    (deferred)             
+fffff803`e4160000 fffff803`e4181000   raspptp    (deferred)             
+fffff803`e4190000 fffff803`e41ac000   raspppoe   (deferred)             
+fffff803`e41b0000 fffff803`e41bf000   ndistapi   (deferred)             
+fffff803`e41c0000 fffff803`e41fa000   ndiswan    (deferred)             
+fffff803`e4200000 fffff803`e420d000   hvsocketcontrol   (deferred)             
+fffff803`e4210000 fffff803`e4308000   xvdd       (deferred)             
+fffff803`e4310000 fffff803`e4334000   gameflt    (deferred)             
+fffff803`e4340000 fffff803`e4388000   winnat     (deferred)             
+fffff803`e4390000 fffff803`e439b000   NTIOLib_X64   (deferred)             
+fffff803`e43b0000 fffff803`e4984000   qEgQwYLKMzzoVAvgHMV   (deferred)             
+fffff803`e4bf0000 fffff803`e4d79000   HTTP       (deferred)             
+fffff803`e4d80000 fffff803`e4d9a000   mpsdrv     (deferred)             
+
+Unloaded modules:
+fffff803`e43a0000 fffff803`e43ac000   NTIOLib_X64.
+fffff803`ba280000 fffff803`ba2ac000   luafv.sys
+fffff803`92a80000 fffff803`92a90000   dump_storpor
+fffff803`92ac0000 fffff803`92af0000   dump_stornvm
+fffff803`92b10000 fffff803`92b2e000   dump_dumpfve
+fffff803`942b0000 fffff803`942cd000   dam.sys 
+fffff803`7aa30000 fffff803`7aa41000   WdBoot.sys
+fffff803`7baf0000 fffff803`7bb01000   hwpolicy.sys
+fffff803`74760000 fffff803`749f0000   mcupdate.dll
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

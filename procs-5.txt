@@ -1,0 +1,1120 @@
+Opened log file 'C:\Users\noi\Downloads\rojzqjhezq\procs-5.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+   EnableRedirectToChakraJsProvider : false
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.015 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 30
+
+Microsoft (R) Windows Debugger Version 10.0.28000.3231 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\noi\Downloads\rojzqjhezq\crash-5-full.dmp]
+Kernel Bitmap Dump File: Kernel address space is available, User address space may not be available.
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*C:\symbols*https://msdl.microsoft.com/download/symbols
+Symbol search path is: srv*C:\symbols*https://msdl.microsoft.com/download/symbols
+Executable search path is: 
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'
+Windows 10 Kernel Version 19041 MP (12 procs) Free x64
+Product: WinNt, suite: TerminalServer SingleUserTS
+Edition build lab: 19041.1.amd64fre.vb_release.191206-1406
+Kernel base = 0xfffff807`45200000 PsLoadedModuleList = 0xfffff807`45e2a420
+Debug session time: Tue Nov 17 19:26:08.756 2026 (UTC + 1:00)
+System Uptime: 0 days 0:18:56.400
+Loading Kernel Symbols
+...............................................................
+................................................................
+................................................................
+..
+Loading User Symbols
+PEB is paged out (Peb.Ldr = 00000000`002a3018).  Type ".hh dbgerr001" for details
+Loading unloaded module list
+..........
+For analysis of this file, run !analyze -v
+6: kd> !process 0 0
+**** NT ACTIVE PROCESS DUMP ****
+PROCESS ffffb30e966a9040
+    SessionId: none  Cid: 0004    Peb: 00000000  ParentCid: 0000
+    DirBase: 001ad000  ObjectTable: ffff85042b244700  HandleCount: 3751.
+    Image: System
+
+PROCESS ffffb30e9673d040
+    SessionId: none  Cid: 0058    Peb: 00000000  ParentCid: 0004
+    DirBase: 119738000  ObjectTable: ffff85042b2533c0  HandleCount:   0.
+    Image: Secure System
+
+PROCESS ffffb30e968d1040
+    SessionId: none  Cid: 009c    Peb: 00000000  ParentCid: 0004
+    DirBase: 0074f000  ObjectTable: ffff85042b2832c0  HandleCount:   0.
+    Image: Registry
+
+PROCESS ffffb30e9d1bf0c0
+    SessionId: none  Cid: 01dc    Peb: 002a6000  ParentCid: 0004
+    DirBase: 115107000  ObjectTable: ffff85042bb06c40  HandleCount:  53.
+    Image: smss.exe
+
+PROCESS ffffb30e9d5b4140
+    SessionId: 0  Cid: 02a4    Peb: 00305000  ParentCid: 0280
+    DirBase: 11c798000  ObjectTable: ffff85042ee0b3c0  HandleCount: 609.
+    Image: csrss.exe
+
+PROCESS ffffb30ea3f74140
+    SessionId: 1  Cid: 030c    Peb: 00298000  ParentCid: 0304
+    DirBase: 69f0e000  ObjectTable: ffff85042ed71480  HandleCount: 771.
+    Image: csrss.exe
+
+PROCESS ffffb30ea3f86100
+    SessionId: 0  Cid: 0314    Peb: 003e2000  ParentCid: 0280
+    DirBase: 028d8000  ObjectTable: ffff85042edc4c00  HandleCount: 168.
+    Image: wininit.exe
+
+PROCESS ffffb30ea3a7c080
+    SessionId: 0  Cid: 0354    Peb: 00296000  ParentCid: 0314
+    DirBase: 11bacb000  ObjectTable: ffff85042b627c40  HandleCount: 736.
+    Image: services.exe
+
+PROCESS ffffb30ea3a68080
+    SessionId: 0  Cid: 0368    Peb: 003ce000  ParentCid: 0314
+    DirBase: 11a8b3000  ObjectTable: ffff85042b623c40  HandleCount:  53.
+    Image: LsaIso.exe
+
+PROCESS ffffb30ea3ace080
+    SessionId: 0  Cid: 0370    Peb: 00217000  ParentCid: 0314
+    DirBase: 11ba7d000  ObjectTable: ffff85042b8f0c40  HandleCount: 1328.
+    Image: lsass.exe
+
+PROCESS ffffb30ea3bdd080
+    SessionId: 1  Cid: 03b8    Peb: 00295000  ParentCid: 0304
+    DirBase: 47004c000  ObjectTable: ffff85042eda6a00  HandleCount: 277.
+    Image: winlogon.exe
+
+PROCESS ffffb30ea3bc3080
+    SessionId: 0  Cid: 02bc    Peb: 00265000  ParentCid: 0354
+    DirBase: 131e2a000  ObjectTable: ffff85042ed41040  HandleCount: 1362.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b87080
+    SessionId: 1  Cid: 0308    Peb: 100204000  ParentCid: 03b8
+    DirBase: 131d51000  ObjectTable: ffff85042f8423c0  HandleCount:  50.
+    Image: fontdrvhost.exe
+
+PROCESS ffffb30ea3b86080
+    SessionId: 0  Cid: 03f4    Peb: a492bfb000  ParentCid: 0314
+    DirBase: 131cbd000  ObjectTable: ffff85042f842040  HandleCount:  50.
+    Image: fontdrvhost.exe
+
+PROCESS ffffb30ea3bd9240
+    SessionId: 0  Cid: 044c    Peb: 0034e000  ParentCid: 0354
+    DirBase: 13061a000  ObjectTable: ffff85042f771040  HandleCount: 1269.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3aee080
+    SessionId: 0  Cid: 0480    Peb: 003ac000  ParentCid: 0354
+    DirBase: 11b7fb000  ObjectTable: ffff85042ed64480  HandleCount: 360.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b5e080
+    SessionId: 0  Cid: 04ec    Peb: 003f5000  ParentCid: 0354
+    DirBase: 134115000  ObjectTable: ffff85042eff1840  HandleCount: 542.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3ba2280
+    SessionId: 0  Cid: 0508    Peb: 00240000  ParentCid: 0354
+    DirBase: 13446d000  ObjectTable: ffff85042f84b040  HandleCount: 112.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b50080
+    SessionId: 0  Cid: 0538    Peb: 00330000  ParentCid: 0354
+    DirBase: 11bff2000  ObjectTable: ffff85042f84ab40  HandleCount: 214.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3a95080
+    SessionId: 0  Cid: 0554    Peb: 003f8000  ParentCid: 0354
+    DirBase: 106093000  ObjectTable: ffff85042f84dbc0  HandleCount: 260.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3ac5080
+    SessionId: 0  Cid: 0578    Peb: 002ef000  ParentCid: 0354
+    DirBase: 103020000  ObjectTable: ffff85042f810c00  HandleCount: 153.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b74080
+    SessionId: 0  Cid: 05c0    Peb: 002c7000  ParentCid: 0354
+    DirBase: 102696000  ObjectTable: ffff85042fd3bbc0  HandleCount: 430.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b1c280
+    SessionId: 1  Cid: 0634    Peb: 00286000  ParentCid: 03b8
+    DirBase: 11b6dc000  ObjectTable: ffff85042fd02bc0  HandleCount: 1195.
+    Image: dwm.exe
+
+PROCESS ffffb30ea3aa2080
+    SessionId: 0  Cid: 064c    Peb: 0027e000  ParentCid: 0354
+    DirBase: 103681000  ObjectTable: ffff85042f913bc0  HandleCount: 458.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3aac080
+    SessionId: 0  Cid: 0698    Peb: 0028e000  ParentCid: 0354
+    DirBase: 1035c7000  ObjectTable: ffff85042fc27bc0  HandleCount: 143.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3bb8080
+    SessionId: 0  Cid: 06bc    Peb: 002b3000  ParentCid: 0354
+    DirBase: 103a57000  ObjectTable: ffff85042f995bc0  HandleCount: 229.
+    Image: svchost.exe
+
+PROCESS ffffb30ea18020c0
+    SessionId: 0  Cid: 0708    Peb: 0030c000  ParentCid: 0354
+    DirBase: 108cad000  ObjectTable: ffff85042fc0a840  HandleCount: 656.
+    Image: vmms.exe
+
+PROCESS ffffb30ea180b080
+    SessionId: 0  Cid: 0728    Peb: 002a1000  ParentCid: 0354
+    DirBase: 103dca000  ObjectTable: ffff85042f91abc0  HandleCount: 400.
+    Image: svchost.exe
+
+PROCESS ffffb30ea180e080
+    SessionId: 0  Cid: 0730    Peb: 0034a000  ParentCid: 0354
+    DirBase: 104a02000  ObjectTable: ffff85042f911c00  HandleCount: 224.
+    Image: svchost.exe
+
+PROCESS ffffb30ea31020c0
+    SessionId: 0  Cid: 077c    Peb: 00274000  ParentCid: 0354
+    DirBase: 1031e2000  ObjectTable: ffff85042f90dc00  HandleCount: 396.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3b71340
+    SessionId: 0  Cid: 07a0    Peb: 0036c000  ParentCid: 0354
+    DirBase: 00358000  ObjectTable: ffff85042f8a3c00  HandleCount: 246.
+    Image: svchost.exe
+
+PROCESS ffffb30ea3154080
+    SessionId: 0  Cid: 07f4    Peb: 0028c000  ParentCid: 0354
+    DirBase: 105422000  ObjectTable: ffff85042f8a1c00  HandleCount: 167.
+    Image: svchost.exe
+
+PROCESS ffffb30ea188c080
+    SessionId: 0  Cid: 03a0    Peb: 002e7000  ParentCid: 0354
+    DirBase: 106673000  ObjectTable: ffff85042fc1fc40  HandleCount: 648.
+    Image: svchost.exe
+
+PROCESS ffffb30ea18c0080
+    SessionId: 0  Cid: 0810    Peb: 0029f000  ParentCid: 0354
+    DirBase: 1048a8000  ObjectTable: ffff85042fd56b80  HandleCount: 547.
+    Image: NVDisplay.Container.exe
+
+PROCESS ffffb30ea18ca080
+    SessionId: 0  Cid: 0828    Peb: 002c6000  ParentCid: 0354
+    DirBase: 10a940000  ObjectTable: ffff85042fc25b80  HandleCount: 180.
+    Image: svchost.exe
+
+PROCESS ffffb30ea19660c0
+    SessionId: 0  Cid: 08a4    Peb: 00327000  ParentCid: 0354
+    DirBase: 10a52d000  ObjectTable: ffff85042f8c2b80  HandleCount: 175.
+    Image: svchost.exe
+
+PROCESS ffffb30ea196c080
+    SessionId: 0  Cid: 08ac    Peb: 0033a000  ParentCid: 0354
+    DirBase: 10a958000  ObjectTable: ffff85042f982b80  HandleCount: 175.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1a07080
+    SessionId: 0  Cid: 0954    Peb: 002d4000  ParentCid: 0354
+    DirBase: 479642000  ObjectTable: ffff85042f98bb80  HandleCount: 322.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1a0e080
+    SessionId: 0  Cid: 096c    Peb: 003ce000  ParentCid: 0354
+    DirBase: 10a7c4000  ObjectTable: ffff85042f8485c0  HandleCount: 210.
+    Image: svchost.exe
+
+PROCESS ffffb30ea18d8080
+    SessionId: 0  Cid: 09b0    Peb: 00292000  ParentCid: 0354
+    DirBase: 17aeba000  ObjectTable: ffff85042f9075c0  HandleCount: 282.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1a5d080
+    SessionId: 0  Cid: 09f4    Peb: 003bb000  ParentCid: 0354
+    DirBase: 47815d000  ObjectTable: ffff85042ff866c0  HandleCount: 127.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1a98080
+    SessionId: 0  Cid: 0a30    Peb: 003ed000  ParentCid: 0354
+    DirBase: 478794000  ObjectTable: ffff85042feaabc0  HandleCount: 255.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1a9c0c0
+    SessionId: 0  Cid: 0a38    Peb: 002bc000  ParentCid: 0354
+    DirBase: 47a3dd000  ObjectTable: ffff850430050c00  HandleCount: 179.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1ad6080
+    SessionId: 0  Cid: 0a7c    Peb: 00298000  ParentCid: 0354
+    DirBase: 47a3d5000  ObjectTable: ffff85043004ec40  HandleCount: 235.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1ad9080
+    SessionId: 0  Cid: 0a84    Peb: 003e5000  ParentCid: 0354
+    DirBase: 10b4a5000  ObjectTable: ffff85042f92bb40  HandleCount: 160.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1b020c0
+    SessionId: 0  Cid: 0ab0    Peb: 00368000  ParentCid: 0354
+    DirBase: 102660000  ObjectTable: ffff85042f92ab40  HandleCount: 184.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1b0a080
+    SessionId: 0  Cid: 0ae0    Peb: 003a4000  ParentCid: 0354
+    DirBase: 135423000  ObjectTable: ffff85042f928b40  HandleCount: 132.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1b770c0
+    SessionId: 0  Cid: 0b10    Peb: 00291000  ParentCid: 0354
+    DirBase: 13367b000  ObjectTable: ffff85042f927b40  HandleCount: 232.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1b8a080
+    SessionId: 0  Cid: 0b5c    Peb: 0025e000  ParentCid: 0354
+    DirBase: 102f2d000  ObjectTable: ffff85042f925b40  HandleCount: 399.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1bdc0c0
+    SessionId: 0  Cid: 0bdc    Peb: 00220000  ParentCid: 0354
+    DirBase: 135391000  ObjectTable: ffff85042f921b40  HandleCount: 208.
+    Image: svchost.exe
+
+PROCESS ffffb30e9d333080
+    SessionId: 0  Cid: 0c74    Peb: 00216000  ParentCid: 0354
+    DirBase: 13c9b7000  ObjectTable: ffff85042f91eb40  HandleCount: 140.
+    Image: vmcompute.exe
+
+PROCESS ffffb30ea1d63080
+    SessionId: 0  Cid: 0cf4    Peb: 0026f000  ParentCid: 0354
+    DirBase: 13ae6e000  ObjectTable: ffff85042f91bb40  HandleCount: 415.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1e23080
+    SessionId: 1  Cid: 0d44    Peb: 0030d000  ParentCid: 0810
+    DirBase: 13d86e000  ObjectTable: ffff85042f917b40  HandleCount: 692.
+    Image: NVDisplay.Container.exe
+
+PROCESS ffffb30ea1e020c0
+    SessionId: 0  Cid: 0d58    Peb: 0020e000  ParentCid: 0354
+    DirBase: 13da17000  ObjectTable: ffff8504306d1c40  HandleCount: 138.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1e07080
+    SessionId: 0  Cid: 0d60    Peb: 003af000  ParentCid: 0354
+    DirBase: 13d9ae000  ObjectTable: ffff8504306ccc40  HandleCount: 366.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1e4e080
+    SessionId: 0  Cid: 0da0    Peb: 002b9000  ParentCid: 0354
+    DirBase: 13a19f000  ObjectTable: ffff8504306c5c40  HandleCount: 215.
+    Image: svchost.exe
+
+PROCESS ffffb30ea1f4c0c0
+    SessionId: 0  Cid: 0e84    Peb: 002f4000  ParentCid: 0354
+    DirBase: 13f721000  ObjectTable: ffff8504305f8c40  HandleCount: 448.
+    Image: spoolsv.exe
+
+PROCESS ffffb30ea1feb0c0
+    SessionId: 0  Cid: 0f24    Peb: 003c5000  ParentCid: 0354
+    DirBase: 442464000  ObjectTable: ffff8504305f4c40  HandleCount: 371.
+    Image: svchost.exe
+
+PROCESS ffffb30ea20340c0
+    SessionId: 0  Cid: 0f78    Peb: 0035b000  ParentCid: 0354
+    DirBase: 13dee9000  ObjectTable: ffff85043060ec40  HandleCount: 168.
+    Image: svchost.exe
+
+PROCESS ffffb30ea204b080
+    SessionId: 0  Cid: 0f8c    Peb: 0028e000  ParentCid: 0354
+    DirBase: 44070d000  ObjectTable: ffff8504305dfc40  HandleCount: 250.
+    Image: svchost.exe
+
+PROCESS ffffb30ea204e080
+    SessionId: 0  Cid: 0f98    Peb: 00332000  ParentCid: 0354
+    DirBase: 13cbba000  ObjectTable: ffff85043028bc40  HandleCount: 332.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2048080
+    SessionId: 0  Cid: 0f94    Peb: 00332000  ParentCid: 0354
+    DirBase: 13df08000  ObjectTable: ffff85043060dc40  HandleCount: 175.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2051080
+    SessionId: 0  Cid: 0fa4    Peb: 00385000  ParentCid: 0354
+    DirBase: 13c0c9000  ObjectTable: ffff850430250c40  HandleCount: 105.
+    Image: svchost.exe
+
+PROCESS ffffb30ea205e0c0
+    SessionId: 0  Cid: 0fbc    Peb: 00339000  ParentCid: 0354
+    DirBase: 13ad0c000  ObjectTable: ffff8504306f2c40  HandleCount: 603.
+    Image: FanControl.Service.exe
+
+PROCESS ffffb30ea2097080
+    SessionId: 0  Cid: 0d1c    Peb: 002dc000  ParentCid: 0354
+    DirBase: 13f930000  ObjectTable: ffff8504303ea680  HandleCount: 140.
+    Image: svchost.exe
+
+PROCESS ffffb30ea209b080
+    SessionId: 0  Cid: 02a0    Peb: 00294000  ParentCid: 0354
+    DirBase: 444294000  ObjectTable: ffff85043061cc40  HandleCount: 210.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2096080
+    SessionId: 0  Cid: 0d94    Peb: 00262000  ParentCid: 0354
+    DirBase: 4443a9000  ObjectTable: ffff85042ede0980  HandleCount: 136.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2099080
+    SessionId: 0  Cid: 1010    Peb: 0028e000  ParentCid: 0354
+    DirBase: 444629000  ObjectTable: ffff85042ed6fc40  HandleCount: 185.
+    Image: svchost.exe
+
+PROCESS ffffb30ea20aa0c0
+    SessionId: 0  Cid: 1018    Peb: 002d7000  ParentCid: 0354
+    DirBase: 44460f000  ObjectTable: ffff850430909c40  HandleCount: 373.
+    Image: svchost.exe
+
+PROCESS ffffb30ea20d1080
+    SessionId: 0  Cid: 1048    Peb: 002f6000  ParentCid: 0354
+    DirBase: 444387000  ObjectTable: ffff850430965c40  HandleCount: 141.
+    Image: jhi_service.exe
+
+PROCESS ffffb30ea20d2080
+    SessionId: 0  Cid: 1078    Peb: 002bc000  ParentCid: 0354
+    DirBase: 444683000  ObjectTable: ffff8504303e8c00  HandleCount: 610.
+    Image: nvcontainer.exe
+
+PROCESS ffffb30ea20d9080
+    SessionId: 0  Cid: 10a4    Peb: 00362000  ParentCid: 0354
+    DirBase: 13f4cf000  ObjectTable: ffff8504307b7c00  HandleCount: 232.
+    Image: GameInputRedistService.exe
+
+PROCESS ffffb30ea2194080
+    SessionId: 0  Cid: 10d0    Peb: 0037a000  ParentCid: 0354
+    DirBase: 4443c9000  ObjectTable: ffff85043090bbc0  HandleCount: 262.
+    Image: MSI_Central_Service.exe
+
+PROCESS ffffb30ea21320c0
+    SessionId: 0  Cid: 10dc    Peb: 0037f000  ParentCid: 0354
+    DirBase: 10ada7000  ObjectTable: ffff85042f948b40  HandleCount: 284.
+    Image: MSI_Case_Service.exe
+
+PROCESS ffffb30ea20d3080
+    SessionId: 0  Cid: 10e8    Peb: 0026e000  ParentCid: 0354
+    DirBase: 4430f0000  ObjectTable: ffff8504308e0bc0  HandleCount: 255.
+    Image: WMIRegistrationService.exe
+
+PROCESS ffffb30ea221a080
+    SessionId: 0  Cid: 118c    Peb: 00235000  ParentCid: 0354
+    DirBase: 13fd25000  ObjectTable: ffff8504309d4c80  HandleCount: 114.
+    Image: svchost.exe
+
+PROCESS ffffb30ea22c6080
+    SessionId: 0  Cid: 127c    Peb: 003b8000  ParentCid: 0354
+    DirBase: 13fec2000  ObjectTable: ffff850430c4dc40  HandleCount: 204.
+    Image: svchost.exe
+
+PROCESS ffffb30ea23430c0
+    SessionId: 0  Cid: 12ac    Peb: 00321000  ParentCid: 0f78
+    DirBase: 44008e000  ObjectTable: ffff850430c02b80  HandleCount: 243.
+    Image: dasHost.exe
+
+PROCESS ffffb30ea239d0c0
+    SessionId: 0  Cid: 12e0    Peb: 002e1000  ParentCid: 0354
+    DirBase: 44370d000  ObjectTable: ffff850430cbdc80  HandleCount: 387.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2720080
+    SessionId: 0  Cid: 1710    Peb: 002cd000  ParentCid: 0354
+    DirBase: 45476d000  ObjectTable: ffff8504312c7b40  HandleCount: 161.
+    Image: svchost.exe
+
+PROCESS ffffb30ea2835080
+    SessionId: 0  Cid: 17a4    Peb: 00227000  ParentCid: 0354
+    DirBase: 452ec5000  ObjectTable: ffff85043020dc40  HandleCount: 229.
+    Image: svchost.exe
+
+PROCESS ffffb30ea28d5080
+    SessionId: 0  Cid: 14dc    Peb: 0031a000  ParentCid: 0f78
+    DirBase: 45ce22000  ObjectTable: ffff8504316f2280  HandleCount: 103.
+    Image: dasHost.exe
+
+PROCESS ffffb30ea2acb080
+    SessionId: 1  Cid: 185c    Peb: 0032e000  ParentCid: 1078
+    DirBase: 45b754000  ObjectTable: ffff85043182a740  HandleCount: 675.
+    Image: nvcontainer.exe
+
+PROCESS ffffb30ea2ad3080
+    SessionId: 0  Cid: 1870    Peb: 00260000  ParentCid: 02bc
+    DirBase: 4622e3000  ObjectTable: ffff850431821040  HandleCount: 176.
+    Image: WmiPrvSE.exe
+
+PROCESS ffffb30ea2a50300
+    SessionId: 0  Cid: 18ac    Peb: 00245000  ParentCid: 02bc
+    DirBase: 45cbc0000  ObjectTable: ffff8504318de900  HandleCount: 218.
+    Image: WmiPrvSE.exe
+
+PROCESS ffffb30ea2b8d080
+    SessionId: 0  Cid: 192c    Peb: 0039a000  ParentCid: 0354
+    DirBase: 45d544000  ObjectTable: ffff850431c3ab40  HandleCount: 320.
+    Image: cowork-svc.exe
+
+PROCESS ffffb30ea2b8e080
+    SessionId: 0  Cid: 1938    Peb: 003ce000  ParentCid: 0354
+    DirBase: 461395000  ObjectTable: ffff850431c2b280  HandleCount: 322.
+    Image: gamingservicesnet.exe
+
+PROCESS ffffb30ea2b91080
+    SessionId: 0  Cid: 1940    Peb: 0023a000  ParentCid: 0354
+    DirBase: 4640dd000  ObjectTable: ffff850431c2b900  HandleCount: 634.
+    Image: gamingservices.exe
+
+PROCESS ffffb30ea2cf4080
+    SessionId: 0  Cid: 1a84    Peb: 0029a000  ParentCid: 10d0
+    DirBase: 464e80000  ObjectTable: ffff850431e60ac0  HandleCount: 801.
+    Image: MSI.CentralServer.exe
+
+PROCESS ffffb30ea2cf5080
+    SessionId: 0  Cid: 1a8c    Peb: 00232000  ParentCid: 10e8
+    DirBase: 464f66000  ObjectTable: 00000000  HandleCount:   0.
+    Image: mofcomp.exe
+
+PROCESS ffffb30ea2cf3080
+    SessionId: 0  Cid: 1a94    Peb: 0035f000  ParentCid: 1a84
+    DirBase: 4631e0000  ObjectTable: ffff850431ebab00  HandleCount: 119.
+    Image: conhost.exe
+
+PROCESS ffffb30e9d33c080
+    SessionId: 0  Cid: 1bbc    Peb: 00296000  ParentCid: 10e8
+    DirBase: 465b82000  ObjectTable: 00000000  HandleCount:   0.
+    Image: mofcomp.exe
+
+PROCESS ffffb30ea4cdd0c0
+    SessionId: 0  Cid: 0360    Peb: 003bf000  ParentCid: 0354
+    DirBase: 456ca4000  ObjectTable: ffff8504316edc80  HandleCount: 114.
+    Image: svchost.exe
+
+PROCESS ffffb30ea19ef080
+    SessionId: 1  Cid: 0fd0    Peb: 0022e000  ParentCid: 10a4
+    DirBase: 462637000  ObjectTable: ffff8504318f1c80  HandleCount: 212.
+    Image: GameInputRedistService.exe
+
+PROCESS ffffb30ea618b080
+    SessionId: 0  Cid: 0c68    Peb: 0033e000  ParentCid: 0354
+    DirBase: 4627bd000  ObjectTable: ffff8504306f9c40  HandleCount: 213.
+    Image: svchost.exe
+
+PROCESS ffffb30ea618a080
+    SessionId: 1  Cid: 0920    Peb: 00336000  ParentCid: 1078
+    DirBase: 46b7a0000  ObjectTable: ffff8504306dbc40  HandleCount: 315.
+    Image: nvcontainer.exe
+
+PROCESS ffffb30ea618e080
+    SessionId: 0  Cid: 0580    Peb: 00393000  ParentCid: 0354
+    DirBase: 468acf000  ObjectTable: ffff850432922c80  HandleCount: 213.
+    Image: svchost.exe
+
+PROCESS ffffb30ea61c3080
+    SessionId: 1  Cid: 0fe0    Peb: 00278000  ParentCid: 1078
+    DirBase: 46a30d000  ObjectTable: ffff8504306e0c40  HandleCount: 449.
+    Image: nvcontainer.exe
+
+PROCESS ffffb30ea61c2080
+    SessionId: 1  Cid: 1c24    Peb: 00374000  ParentCid: 07a0
+    DirBase: 46c4d4000  ObjectTable: ffff8504306d4c40  HandleCount: 529.
+    Image: sihost.exe
+
+PROCESS ffffb30ea61c70c0
+    SessionId: 1  Cid: 1c3c    Peb: 003cc000  ParentCid: 1078
+    DirBase: 46cf49000  ObjectTable: ffff85043019ac40  HandleCount: 708.
+    Image: nvcontainer.exe
+
+PROCESS ffffb30ea61ec080
+    SessionId: 1  Cid: 1ca0    Peb: 0025a000  ParentCid: 1078
+    DirBase: 3c0cc3000  ObjectTable: 00000000  HandleCount:   0.
+    Image: rundll32.exe
+
+PROCESS ffffb30ea6306080
+    SessionId: 1  Cid: 1cd0    Peb: 00305000  ParentCid: 0354
+    DirBase: 3c3485000  ObjectTable: ffff8504329abc40  HandleCount: 365.
+    Image: svchost.exe
+
+PROCESS ffffb30ea6343080
+    SessionId: 1  Cid: 1d18    Peb: 003d2000  ParentCid: 0354
+    DirBase: 3c3945000  ObjectTable: ffff850431858c00  HandleCount: 406.
+    Image: svchost.exe
+
+PROCESS ffffb30ea636d080
+    SessionId: 0  Cid: 1de0    Peb: 00315000  ParentCid: 0354
+    DirBase: 3c39d9000  ObjectTable: ffff85043259bc00  HandleCount: 259.
+    Image: svchost.exe
+
+PROCESS ffffb30ea640c0c0
+    SessionId: 1  Cid: 1e80    Peb: 0022f000  ParentCid: 0728
+    DirBase: 3c84c4000  ObjectTable: ffff85043258ac00  HandleCount: 425.
+    Image: taskhostw.exe
+
+PROCESS ffffb30ea20d5080
+    SessionId: 1  Cid: 1f58    Peb: 00281000  ParentCid: 03b8
+    DirBase: 3cc24f000  ObjectTable: 00000000  HandleCount:   0.
+    Image: userinit.exe
+
+PROCESS ffffb30ea644c080
+    SessionId: 1  Cid: 1f88    Peb: 003e4000  ParentCid: 1f58
+    DirBase: 3c0ab3000  ObjectTable: ffff850432bafc40  HandleCount: 2658.
+    Image: explorer.exe
+
+PROCESS ffffb30ea645e080
+    SessionId: 1  Cid: 1fa8    Peb: 003f7000  ParentCid: 0728
+    DirBase: 3cbf70000  ObjectTable: ffff850432c53c40  HandleCount: 265.
+    Image: taskhostw.exe
+
+PROCESS ffffb30ea6562080
+    SessionId: 0  Cid: 10f4    Peb: 002d9000  ParentCid: 0354
+    DirBase: 3ce747000  ObjectTable: ffff850432c50bc0  HandleCount: 310.
+    Image: svchost.exe
+
+PROCESS ffffb30ea65d9080
+    SessionId: 0  Cid: 2024    Peb: 00203000  ParentCid: 0354
+    DirBase: 3cfc51000  ObjectTable: ffff85043258fbc0  HandleCount: 173.
+    Image: svchost.exe
+
+PROCESS ffffb30ea6608080
+    SessionId: 1  Cid: 2068    Peb: 00229000  ParentCid: 2024
+    DirBase: 3d2846000  ObjectTable: ffff850432d2ec00  HandleCount: 438.
+    Image: ctfmon.exe
+
+PROCESS ffffb30ea661c080
+    SessionId: 0  Cid: 20a0    Peb: 00218000  ParentCid: 0354
+    DirBase: 3cec07000  ObjectTable: ffff8504329f4bc0  HandleCount: 684.
+    Image: SearchIndexer.exe
+
+PROCESS ffffb30ea6ac9340
+    SessionId: 0  Cid: 21d4    Peb: 00344000  ParentCid: 0354
+    DirBase: 44857d000  ObjectTable: ffff85043324bc00  HandleCount: 204.
+    Image: svchost.exe
+
+PROCESS ffffb30ea6da0140
+    SessionId: 1  Cid: 2654    Peb: 002db000  ParentCid: 1078
+    DirBase: 3d776a000  ObjectTable: 00000000  HandleCount:   0.
+    Image: rundll32.exe
+
+PROCESS ffffb30ea6d7f080
+    SessionId: 1  Cid: 26a8    Peb: 00392000  ParentCid: 1078
+    DirBase: 3e9f93000  ObjectTable: ffff850433b63600  HandleCount: 308.
+    Image: nvsphelper64.exe
+
+PROCESS ffffb30ea6d80080
+    SessionId: 1  Cid: 26bc    Peb: 0030c000  ParentCid: 0fe0
+    DirBase: 3de78f000  ObjectTable: ffff850433b7dc40  HandleCount: 1709.
+    Image: NVIDIA Overlay.exe
+
+PROCESS ffffb30ea6d93240
+    SessionId: 1  Cid: 26e0    Peb: 003e5000  ParentCid: 0354
+    DirBase: 3dedc4000  ObjectTable: ffff850432ac1c40  HandleCount: 447.
+    Image: svchost.exe
+
+PROCESS ffffb30ea6eb3080
+    SessionId: 0  Cid: 27a4    Peb: 00317000  ParentCid: 0354
+    DirBase: 3e879e000  ObjectTable: ffff850433d02b80  HandleCount: 126.
+    Image: svchost.exe
+
+PROCESS ffffb30ea6f88080
+    SessionId: 0  Cid: 2538    Peb: 00399000  ParentCid: 0354
+    DirBase: 3d67fa000  ObjectTable: ffff8504324d5b40  HandleCount: 115.
+    Image: GameInputSvc.exe
+
+PROCESS ffffb30ea6f8b080
+    SessionId: 1  Cid: 24f0    Peb: 002ff000  ParentCid: 2538
+    DirBase: 3cd9e8000  ObjectTable: ffff850432dcfc00  HandleCount: 368.
+    Image: GameInputSvc.exe
+
+PROCESS ffffb30ea6f760c0
+    SessionId: 1  Cid: 2314    Peb: 5a16e71000  ParentCid: 02bc
+DeepFreeze
+    DirBase: 3e9771000  ObjectTable: ffff850434228c00  HandleCount: 781.
+    Image: SearchApp.exe
+
+PROCESS ffffb30ea7019080
+    SessionId: 1  Cid: 25f4    Peb: 46cebb6000  ParentCid: 02bc
+    DirBase: 3e57bc000  ObjectTable: ffff8504314ccb40  HandleCount: 701.
+    Image: StartMenuExperienceHost.exe
+
+PROCESS ffffb30ea7317240
+    SessionId: 1  Cid: 2544    Peb: 00340000  ParentCid: 02bc
+    DirBase: 3fd95b000  ObjectTable: ffff850432553b40  HandleCount: 315.
+    Image: RuntimeBroker.exe
+
+PROCESS ffffb30ea7311080
+    SessionId: 0  Cid: 2564    Peb: 003bd000  ParentCid: 0354
+    DirBase: 3fd99d000  ObjectTable: ffff850434353c80  HandleCount: 194.
+    Image: svchost.exe
+
+PROCESS ffffb30ea73a6080
+    SessionId: 1  Cid: 26f8    Peb: 00290000  ParentCid: 02bc
+    DirBase: 3ef1af000  ObjectTable: ffff8504343c9040  HandleCount: 482.
+    Image: RuntimeBroker.exe
+
+PROCESS ffffb30ea73df080
+    SessionId: 0  Cid: 2848    Peb: 003ba000  ParentCid: 0354
+    DirBase: 3ebc71000  ObjectTable: ffff850434446b80  HandleCount: 189.
+    Image: svchost.exe
+
+PROCESS ffffb30ea7460080
+    SessionId: 0  Cid: 28d4    Peb: 003eb000  ParentCid: 0354
+    DirBase: 3ec807000  ObjectTable: ffff850432590b40  HandleCount: 279.
+    Image: svchost.exe
+
+PROCESS ffffb30ea749b080
+    SessionId: 1  Cid: 293c    Peb: 003c9000  ParentCid: 26bc
+    DirBase: 3f9723000  ObjectTable: ffff85043449bc40  HandleCount: 615.
+    Image: NVIDIA Overlay.exe
+
+PROCESS ffffb30ea752e080
+    SessionId: 1  Cid: 2978    Peb: 6a57012000  ParentCid: 02bc
+DeepFreeze
+    DirBase: 3eb41c000  ObjectTable: ffff8504344d4b80  HandleCount: 1177.
+    Image: SearchApp.exe
+
+PROCESS ffffb30ea752d080
+    SessionId: 1  Cid: 29b0    Peb: 8a04478000  ParentCid: 2314
+DeepFreeze
+    DirBase: 3d9903000  ObjectTable: ffff8504343d7c00  HandleCount: 1228.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea7531080
+    SessionId: 1  Cid: 29bc    Peb: 00318000  ParentCid: 26bc
+    DirBase: 3d60b0000  ObjectTable: ffff850434534b80  HandleCount: 383.
+    Image: NVIDIA Overlay.exe
+
+PROCESS ffffb30ea757e1c0
+    SessionId: 1  Cid: 2ab0    Peb: cc8ce05000  ParentCid: 29b0
+DeepFreeze
+    DirBase: 3f44ca000  ObjectTable: ffff8504345efbc0  HandleCount: 215.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea760e240
+    SessionId: 1  Cid: 2b10    Peb: 00229000  ParentCid: 26bc
+    DirBase: 3fd5fb000  ObjectTable: ffff8504327a1b40  HandleCount: 251.
+    Image: NVIDIA Overlay.exe
+
+PROCESS ffffb30ea780c0c0
+    SessionId: 1  Cid: 2cf8    Peb: ee080bd000  ParentCid: 29b0
+DeepFreeze
+    DirBase: 4168e2000  ObjectTable: ffff850434adcbc0  HandleCount: 366.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea774a080
+    SessionId: 1  Cid: 2d04    Peb: c1fd10c000  ParentCid: 29b0
+DeepFreeze
+    DirBase: 12efae000  ObjectTable: ffff850434b02b80  HandleCount: 524.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea7dc6080
+    SessionId: 1  Cid: 2d18    Peb: 8719859000  ParentCid: 29b0
+DeepFreeze
+    DirBase: 416483000  ObjectTable: ffff850433263b40  HandleCount: 204.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea7e840c0
+    SessionId: 1  Cid: 2ea0    Peb: 00246000  ParentCid: 26bc
+    DirBase: 41c461000  ObjectTable: ffff850434bdcb80  HandleCount: 402.
+    Image: NVIDIA Overlay.exe
+
+PROCESS ffffb30ea7fd5340
+    SessionId: 1  Cid: 30b8    Peb: 00209000  ParentCid: 0728
+    DirBase: 42c170000  ObjectTable: ffff850434da9c00  HandleCount: 446.
+    Image: MSI.TerminalServer.exe
+
+PROCESS ffffb30ea8070080
+    SessionId: 1  Cid: 1d58    Peb: 002bf000  ParentCid: 02bc
+    DirBase: 142103000  ObjectTable: ffff8504347d9b40  HandleCount: 291.
+    Image: RuntimeBroker.exe
+
+PROCESS ffffb30ea6a240c0
+    SessionId: 0  Cid: 3278    Peb: 00251000  ParentCid: 1a84
+    DirBase: 3e8214000  ObjectTable: ffff8504355a0c40  HandleCount: 327.
+    Image: CC_Engine_x64.exe
+
+PROCESS ffffb30ea6a130c0
+    SessionId: 0  Cid: 329c    Peb: 00372000  ParentCid: 3278
+    DirBase: 142645000  ObjectTable: ffff8504355a1c40  HandleCount: 108.
+    Image: conhost.exe
+
+PROCESS ffffb30ea6766340
+    SessionId: 1  Cid: 33f4    Peb: 003d0000  ParentCid: 0728
+    DirBase: 142a4a000  ObjectTable: ffff850435829c40  HandleCount: 723.
+    Image: FanControl.exe
+
+PROCESS ffffb30ea6ef0080
+    SessionId: 1  Cid: 0254    Peb: 0032d000  ParentCid: 02bc
+    DirBase: 3ed007000  ObjectTable: ffff850432d51b40  HandleCount: 128.
+    Image: RuntimeBroker.exe
+
+PROCESS ffffb30ea26d4080
+    SessionId: 1  Cid: 2474    Peb: 00351000  ParentCid: 02bc
+    DirBase: 14adce000  ObjectTable: ffff85043599dc80  HandleCount: 659.
+    Image: TextInputHost.exe
+
+PROCESS ffffb30ea6d78080
+    SessionId: 1  Cid: 234c    Peb: 0038b000  ParentCid: 15f0
+    DirBase: 152641000  ObjectTable: ffff850435bd2c40  HandleCount: 1199.
+    Image: Discord.exe
+
+PROCESS ffffb30ea6d7c080
+    SessionId: 1  Cid: 066c    Peb: 0024f000  ParentCid: 1f88
+    DirBase: 156901000  ObjectTable: ffff850435bceb80  HandleCount: 1127.
+    Image: steam.exe
+
+PROCESS ffffb30ea74ed080
+    SessionId: 1  Cid: 34b4    Peb: 002ca000  ParentCid: 066c
+    DirBase: 15729a000  ObjectTable: ffff850435d8bc40  HandleCount: 1412.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea83cf0c0
+    SessionId: 0  Cid: 34e8    Peb: 00266000  ParentCid: 0354
+    DirBase: 15af73000  ObjectTable: ffff850435d8fc00  HandleCount: 264.
+    Image: steamservice.exe
+
+PROCESS ffffb30ea882d280
+    SessionId: 1  Cid: 3580    Peb: 002d7000  ParentCid: 34b4
+    DirBase: 165795000  ObjectTable: ffff850437298b80  HandleCount: 203.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea77ec240
+    SessionId: 1  Cid: 3624    Peb: 00376000  ParentCid: 234c
+    DirBase: 14da29000  ObjectTable: ffff850435be5c40  HandleCount: 182.
+    Image: Discord.exe
+
+PROCESS ffffb30ea8571340
+    SessionId: 1  Cid: 3494    Peb: 9b28802000  ParentCid: 234c
+    DirBase: 1592c3000  ObjectTable: ffff85043734d680  HandleCount: 700.
+    Image: Discord.exe
+
+PROCESS ffffb30ea8919240
+    SessionId: 0  Cid: 34a0    Peb: 002f5000  ParentCid: 0354
+    DirBase: 168615000  ObjectTable: ffff85043734e680  HandleCount: 174.
+    Image: svchost.exe
+
+PROCESS ffffb30ea8990080
+    SessionId: 1  Cid: 2210    Peb: 00350000  ParentCid: 234c
+    DirBase: 16ca3c000  ObjectTable: ffff850437347680  HandleCount: 347.
+    Image: Discord.exe
+
+PROCESS ffffb30ea89fa080
+    SessionId: 1  Cid: 3694    Peb: 1da2b78000  ParentCid: 34b4
+    DirBase: 16c6ed000  ObjectTable: ffff850437345680  HandleCount: 669.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea89f9080
+    SessionId: 1  Cid: 36ac    Peb: 003d2000  ParentCid: 34b4
+    DirBase: 16a8b4000  ObjectTable: ffff850437348680  HandleCount: 325.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea8bab240
+    SessionId: 1  Cid: 341c    Peb: a849511000  ParentCid: 34b4
+    DirBase: 173b2a000  ObjectTable: ffff85043734b680  HandleCount: 211.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea89130c0
+    SessionId: 1  Cid: 39bc    Peb: 51b60be000  ParentCid: 34b4
+    DirBase: 17e97d000  ObjectTable: ffff850435983bc0  HandleCount: 815.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea89560c0
+    SessionId: 1  Cid: 3ae8    Peb: 00259000  ParentCid: 3620
+    DirBase: 17d1c1000  ObjectTable: ffff850437ba7c40  HandleCount: 601.
+    Image: DCv2.exe
+
+PROCESS ffffb30ea88a8080
+    SessionId: 1  Cid: 3bc0    Peb: 002bb000  ParentCid: 02bc
+    DirBase: 1805f5000  ObjectTable: ffff8504370d5c80  HandleCount: 160.
+    Image: RuntimeBroker.exe
+
+PROCESS ffffb30ea8e3f080
+    SessionId: 1  Cid: 3838    Peb: 00275000  ParentCid: 234c
+    DirBase: 186e92000  ObjectTable: ffff8504372a4c00  HandleCount: 1167.
+    Image: Discord.exe
+
+PROCESS ffffb30ea73f9080
+    SessionId: 1  Cid: 3ccc    Peb: 00370000  ParentCid: 1f88
+    DirBase: 1ad6eb000  ObjectTable: ffff850435827c40  HandleCount: 1721.
+    Image: chrome.exe
+
+PROCESS ffffb30ea73f6080
+    SessionId: 1  Cid: 3d18    Peb: 00355000  ParentCid: 3ccc
+    DirBase: 1ae517000  ObjectTable: ffff850433dfcb40  HandleCount: 204.
+    Image: chrome.exe
+
+PROCESS ffffb30ea7404340
+    SessionId: 1  Cid: 3ecc    Peb: e685a1d000  ParentCid: 234c
+    DirBase: 1a54bc000  ObjectTable: ffff8504350b1b40  HandleCount: 280.
+    Image: Discord.exe
+
+PROCESS ffffb30ea25e7080
+    SessionId: 1  Cid: 3c58    Peb: 72d647e000  ParentCid: 3ccc
+    DirBase: 1c7c2f000  ObjectTable: ffff8504350c0b40  HandleCount: 568.
+    Image: chrome.exe
+
+PROCESS ffffb30ea92950c0
+    SessionId: 1  Cid: 3ca0    Peb: 0021b000  ParentCid: 3ccc
+    DirBase: 1c94ed000  ObjectTable: ffff8504350c1b40  HandleCount: 418.
+    Image: chrome.exe
+
+PROCESS ffffb30ea9073080
+    SessionId: 1  Cid: 3e08    Peb: a286ead000  ParentCid: 3ccc
+    DirBase: 1cafc0000  ObjectTable: ffff8504342bcb40  HandleCount: 184.
+    Image: chrome.exe
+
+PROCESS ffffb30ea8bb3080
+    SessionId: 1  Cid: 3a74    Peb: 470082a000  ParentCid: 3ccc
+    DirBase: 1cd8d9000  ObjectTable: ffff85043886fc40  HandleCount: 331.
+    Image: chrome.exe
+
+PROCESS ffffb30ea9344080
+    SessionId: 1  Cid: 4294    Peb: 002bf000  ParentCid: 1f88
+    DirBase: 1defbd000  ObjectTable: ffff850438c0f800  HandleCount: 1236.
+    Image: Code.exe
+
+PROCESS ffffb30ea740f080
+    SessionId: 0  Cid: 3cbc    Peb: 0034d000  ParentCid: 0cf4
+    DirBase: 20cdd5000  ObjectTable: ffff850439178b80  HandleCount: 203.
+    Image: audiodg.exe
+
+PROCESS ffffb30ea9496080
+    SessionId: 1  Cid: 4160    Peb: 003a4000  ParentCid: 02bc
+    DirBase: 20a622000  ObjectTable: ffff850439181c40  HandleCount: 143.
+    Image: CompPkgSrv.exe
+
+PROCESS ffffb30ea905d080
+    SessionId: 1  Cid: 4118    Peb: 97866f1000  ParentCid: 34b4
+    DirBase: 2139ef000  ObjectTable: ffff850439106b80  HandleCount: 578.
+    Image: steamwebhelper.exe
+
+PROCESS ffffb30ea91ca080
+    SessionId: 1  Cid: 41ac    Peb: 0025c000  ParentCid: 4294
+    DirBase: 20fd25000  ObjectTable: ffff850439103b80  HandleCount: 220.
+    Image: Code.exe
+
+PROCESS ffffb30ea6d79080
+    SessionId: 1  Cid: 41f0    Peb: 39391c6000  ParentCid: 4294
+    DirBase: 21ee3d000  ObjectTable: ffff850435cceb40  HandleCount: 603.
+    Image: Code.exe
+
+PROCESS ffffb30ea91c9080
+    SessionId: 1  Cid: 43b0    Peb: 003b0000  ParentCid: 4294
+    DirBase: 21c51f000  ObjectTable: ffff85043910bbc0  HandleCount: 331.
+    Image: Code.exe
+
+PROCESS ffffb30ea9345080
+    SessionId: 1  Cid: 4328    Peb: 3bfa8f5000  ParentCid: 4294
+    DirBase: 220c0c000  ObjectTable: ffff8504370cfb40  HandleCount: 438.
+    Image: Code.exe
+
+PROCESS ffffb30ea92a3080
+    SessionId: 1  Cid: 4424    Peb: 003ff000  ParentCid: 4294
+    DirBase: 23b302000  ObjectTable: ffff850439385c40  HandleCount: 365.
+    Image: Code.exe
+
+PROCESS ffffb30ea947b080
+    SessionId: 1  Cid: 4618    Peb: 0020a000  ParentCid: 4294
+    DirBase: 24a8b4000  ObjectTable: ffff8504379fdb40  HandleCount: 480.
+    Image: Code.exe
+
+PROCESS ffffb30ea9e63080
+    SessionId: 1  Cid: 46cc    Peb: 0026a000  ParentCid: 4294
+    DirBase: 24d775000  ObjectTable: ffff850439b24b80  HandleCount: 334.
+    Image: Code.exe
+
+PROCESS ffffb30ea9e650c0
+    SessionId: 1  Cid: 46e8    Peb: 0024b000  ParentCid: 4294
+    DirBase: 24e180000  ObjectTable: ffff850437a0cb40  HandleCount: 323.
+    Image: Code.exe
+
+PROCESS ffffb30ea9ed40c0
+    SessionId: 1  Cid: 4574    Peb: 00289000  ParentCid: 4424
+    DirBase: 2620e4000  ObjectTable: ffff850433996b40  HandleCount: 236.
+    Image: Code.exe
+
+PROCESS ffffb30ea9416080
+    SessionId: 1  Cid: 457c    Peb: a463e9a000  ParentCid: 3ccc
+    DirBase: 20afd8000  ObjectTable: ffff850434be1b40  HandleCount: 497.
+    Image: chrome.exe
+
+PROCESS ffffb30eaa459080
+    SessionId: 1  Cid: 47f0    Peb: ef9bbda000  ParentCid: 3ccc
+    DirBase: 253db1000  ObjectTable: ffff85043af46b80  HandleCount: 208.
+    Image: chrome.exe
+
+PROCESS ffffb30ea7410080
+    SessionId: 1  Cid: 3e7c    Peb: 0032b000  ParentCid: 4618
+    DirBase: 2e7fe0000  ObjectTable: ffff850435cd2b40  HandleCount:  65.
+    Image: pet.exe
+
+PROCESS ffffb30ea8fdd080
+    SessionId: 1  Cid: 0abc    Peb: 00396000  ParentCid: 3e7c
+    DirBase: 2e5fd5000  ObjectTable: ffff850435b8fbc0  HandleCount: 111.
+    Image: conhost.exe
+
+PROCESS ffffb30eaa3d7340
+    SessionId: 1  Cid: 0f1c    Peb: bd8e933000  ParentCid: 4294
+    DirBase: 3d972a000  ObjectTable: ffff850432dcdb40  HandleCount: 513.
+    Image: Code.exe
+
+PROCESS ffffb30eaaa3e340
+    SessionId: 1  Cid: 2220    Peb: f5919b7000  ParentCid: 29b0
+DeepFreeze
+    DirBase: 1385be000  ObjectTable: ffff85043bc07040  HandleCount: 232.
+    Image: msedgewebview2.exe
+
+PROCESS ffffb30ea7d9b080
+    SessionId: 1  Cid: 2580    Peb: f9bd3b1000  ParentCid: 02bc
+    DirBase: 26b5f3000  ObjectTable: ffff85043bfb8c00  HandleCount: 469.
+    Image: backgroundTaskHost.exe
+
+PROCESS ffffb30ea947a080
+    SessionId: 0  Cid: 199c    Peb: 00204000  ParentCid: 0354
+    DirBase: 2afd67000  ObjectTable: ffff85042f886c40  HandleCount: 219.
+    Image: svchost.exe
+
+PROCESS ffffb30ea78ef340
+    SessionId: 0  Cid: 3988    Peb: 00227000  ParentCid: 0354
+    DirBase: 28bac4000  ObjectTable: 00000000  HandleCount:   0.
+    Image: svchost.exe
+
+PROCESS ffffb30ea830f080
+    SessionId: 0  Cid: 07ec    Peb: 00265000  ParentCid: 0354
+    DirBase: 30a8dc000  ObjectTable: ffff85043b30bc40  HandleCount: 295.
+    Image: SecurityHealthService.exe
+
+PROCESS ffffb30ea7b38340
+    SessionId: 1  Cid: 29a4    Peb: 00261000  ParentCid: 12b8
+    DirBase: 2517e0000  ObjectTable: 00000000  HandleCount:   0.
+    Image: ROB RUN.exe
+
+PROCESS ffffb30ea18df340
+    SessionId: 1  Cid: 2700    Peb: 00397000  ParentCid: 066c
+    DirBase: 19c87e000  ObjectTable: 00000000  HandleCount:   0.
+    Image: gameoverlayui64.exe
+
+PROCESS ffffb30ea7818340
+    SessionId: 1  Cid: 0688    Peb: 00332000  ParentCid: 066c
+    DirBase: 239b0b000  ObjectTable: ffff850432bad240  HandleCount: 447.
+    Image: start_protected_game.exe
+
+PROCESS ffffb30ea9d09340
+    SessionId: 0  Cid: 1644    Peb: 00342000  ParentCid: 0354
+    DirBase: 20764f000  ObjectTable: ffff85043cbfa400  HandleCount: 300.
+    Image: EasyAntiCheat_EOS.exe
+
+PROCESS ffffb30ea790f340
+    SessionId: 1  Cid: 14ec    Peb: 00246000  ParentCid: 0688
+    DirBase: 295e3a000  ObjectTable: ffff850434bf4c00  HandleCount: 1888.
+    Image: ROB RUN.exe
+
+PROCESS ffffb30ea8f67340
+    SessionId: 1  Cid: 28e4    Peb: 0022e000  ParentCid: 14ec
+    DirBase: 22f29f000  ObjectTable: ffff85042eda2c40  HandleCount: 150.
+    Image: UnityCrashHandler64.exe
+
+PROCESS ffffb30ea948d080
+    SessionId: 1  Cid: 3da4    Peb: 00226000  ParentCid: 14ec
+    DirBase: 372890000  ObjectTable: ffff850440343c40  HandleCount: 149.
+    Image: crashpad_handler.exe
+
+PROCESS ffffb30ea669a080
+    SessionId: 1  Cid: 114c    Peb: 0037a000  ParentCid: 1988
+    DirBase: 126d2000  ObjectTable: ffff85043c983bc0  HandleCount: 783.
+    Image: vctip.exe
+
+PROCESS ffffb30eaa3ce340
+    SessionId: 1  Cid: 1574    Peb: 003ad000  ParentCid: 14ec
+    DirBase: 3a712d000  ObjectTable: ffff85043ce80b80  HandleCount: 149.
+    Image: crashpad_handler.exe
+
+PROCESS ffffb30eaabcd340
+    SessionId: 1  Cid: 1fe0    Peb: 0039e000  ParentCid: 066c
+    DirBase: 1ce8f4000  ObjectTable: ffff85043f3f2b40  HandleCount: 227.
+    Image: gameoverlayui64.exe
+
+PROCESS ffffb30ea784e340
+    SessionId: 0  Cid: 3f04    Peb: 002ce000  ParentCid: 0354
+    DirBase: 29f676000  ObjectTable: ffff85043cebbc40  HandleCount: 176.
+    Image: svchost.exe
+
+PROCESS ffffb30ea90ba080
+    SessionId: 1  Cid: 3ae4    Peb: 002d7000  ParentCid: 02bc
+    DirBase: 1519f2000  ObjectTable: ffff85042fea8c40  HandleCount: 158.
+    Image: smartscreen.exe
+
+PROCESS ffffb30ea92a4080
+    SessionId: 1  Cid: 2f8c    Peb: 20ac48f000  ParentCid: 3ccc
+    DirBase: 44cc3000  ObjectTable: ffff8504307bc800  HandleCount: 288.
+    Image: chrome.exe
+
+PROCESS ffffb30ea797a340
+    SessionId: 1  Cid: 171c    Peb: 0029b000  ParentCid: 4618
+    DirBase: 3c512000  ObjectTable: ffff85043cea0c40  HandleCount: 630.
+    Image: powershell.exe
+
+PROCESS ffffb30ea8f6d340
+    SessionId: 1  Cid: 1b80    Peb: 00292000  ParentCid: 171c
+    DirBase: 55a83000  ObjectTable: ffff850430edfc40  HandleCount: 108.
+    Image: conhost.exe
+
+PROCESS ffffb30ea79a0340
+    SessionId: 1  Cid: 26c4    Peb: 002a3000  ParentCid: 171c
+    DirBase: 63f06000  ObjectTable: ffff85043090a240  HandleCount:  89.
+    Image: RobRunOverlay.exe
+
+6: kd> q
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'

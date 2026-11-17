@@ -1,0 +1,45 @@
+Microsoft (R) COFF/PE Dumper Version 14.44.35230.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file C:\Users\noi\Downloads\rojzqjhezq\build_driver\RrSvc.sys
+
+File Type: EXECUTABLE IMAGE
+
+  Section contains the following imports:
+
+    ntoskrnl.exe
+             140003000 Import Address Table
+             140006028 Import Name Table
+                     0 time date stamp
+                     0 Index of first forwarder reference
+
+                         948 RtlInitUnicodeString
+                         60E MmGetSystemRoutineAddress
+                         8D5 RtlEqualUnicodeString
+                          C9 ExAllocatePoolWithTag
+                          F7 ExFreePoolWithTag
+                         47C IofCompleteRequest
+                         343 IoCreateDevice
+                         350 IoCreateSymbolicLink
+                         35D IoDeleteDevice
+                         35F IoDeleteSymbolicLink
+                         389 IoGetCurrentProcess
+                         702 ObfDereferenceObject
+                         8B8 RtlDeleteElementGenericTableAvl
+                         8CE RtlEnumerateGenericTableAvl
+                         7F4 PsLookupProcessByProcessId
+                         5F4 MmCopyVirtualMemory
+                         9C8 RtlPcToFileHeader
+                         7B7 PsGetProcessPeb
+                         346 IoCreateDriver
+                         C64 __C_specific_handler
+
+  Summary
+
+        1000 .data
+        1000 .pdata
+        1000 .rdata
+        1000 .reloc
+        2000 .text
+        1000 INIT

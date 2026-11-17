@@ -1,0 +1,336 @@
+Opened log file 'C:\Users\noi\Downloads\rojzqjhezq\disasm.txt'
+
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
+   ExtensionRepository : Implicit
+   UseExperimentalFeatureForNugetShare : true
+   AllowNugetExeUpdate : true
+   NonInteractiveNuget : true
+   AllowNugetMSCredentialProviderInstall : true
+   AllowParallelInitializationOfLocalRepositories : true
+   EnableRedirectToChakraJsProvider : false
+
+   -- Configuring repositories
+      ----> Repository : LocalInstalled, Enabled: true
+      ----> Repository : UserExtensions, Enabled: true
+
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.000 seconds
+
+************* Waiting for Debugger Extensions Gallery to Initialize **************
+
+>>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.016 seconds
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 30
+
+Microsoft (R) Windows Debugger Version 10.0.28000.3231 AMD64
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Loading Dump File [C:\Users\noi\Downloads\rojzqjhezq\crash-3-full.dmp]
+Kernel Bitmap Dump File: Kernel address space is available, User address space may not be available.
+
+
+************* Path validation summary **************
+Response                         Time (ms)     Location
+Deferred                                       srv*C:\symbols
+Deferred                                       https://msdl.microsoft.com/download/symbols
+Symbol search path is: srv*C:\symbols;https://msdl.microsoft.com/download/symbols
+Executable search path is: 
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script successfully loaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'
+Windows 10 Kernel Version 19041 MP (12 procs) Free x64
+Product: WinNt, suite: TerminalServer SingleUserTS
+Edition build lab: 19041.1.amd64fre.vb_release.191206-1406
+Kernel base = 0xfffff803`78c00000 PsLoadedModuleList = 0xfffff803`7982a420
+Debug session time: Tue Nov 17 18:33:50.596 2026 (UTC + 1:00)
+System Uptime: 0 days 0:01:49.241
+Loading Kernel Symbols
+...............................................................
+.....Page 115e02 not present in the dump file. Type ".hh dbgerr004" for details
+...........................................................
+................................................................
+..
+Loading User Symbols
+PEB is paged out (Peb.Ldr = 00000000`0029a018).  Type ".hh dbgerr001" for details
+Loading unloaded module list
+.........
+For analysis of this file, run !analyze -v
+2: kd> .cxr ffff8a84a0351f90; r; u ffffc088b6173f00 ffffc088b6174100; dqs ffff8a84a0352950 ffff8a84a0352a60; u ffffc088b6175070 ffffc088b6175090; db ffffc088b6173000 L20; db ffffc088b6176238 L20; q
+rax=0000000000000000 rbx=0000000000000000 rcx=0000000000000000
+rdx=0000000000000000 rsi=000000000014fc94 rdi=0000000000000000
+rip=ffffc088b6174006 rsp=ffff8a84a0352990 rbp=ffff8a84a0352ac0
+ r8=000000000014fa28  r9=000000000000010c r10=fffff80379556c10
+r11=000000000088f200 r12=0000000000000000 r13=0000000000608f00
+r14=0000000000000000 r15=0000000000000000
+iopl=0         nv up ei pl zr na po nc
+cs=0010  ss=0018  ds=002b  es=002b  fs=0053  gs=002b             efl=00050246
+ffffc088`b6174006 488b5118        mov     rdx,qword ptr [rcx+18h] ds:002b:00000000`00000018=????????????????
+Last set context:
+rax=0000000000000000 rbx=0000000000000000 rcx=0000000000000000
+rdx=0000000000000000 rsi=000000000014fc94 rdi=0000000000000000
+rip=ffffc088b6174006 rsp=ffff8a84a0352990 rbp=ffff8a84a0352ac0
+ r8=000000000014fa28  r9=000000000000010c r10=fffff80379556c10
+r11=000000000088f200 r12=0000000000000000 r13=0000000000608f00
+r14=0000000000000000 r15=0000000000000000
+iopl=0         nv up ei pl zr na po nc
+cs=0010  ss=0018  ds=002b  es=002b  fs=0053  gs=002b             efl=00050246
+ffffc088`b6174006 488b5118        mov     rdx,qword ptr [rcx+18h] ds:002b:00000000`00000018=????????????????
+ffffc088`b6173f00 0000            add     byte ptr [rax],al
+ffffc088`b6173f02 0000            add     byte ptr [rax],al
+ffffc088`b6173f04 0000            add     byte ptr [rax],al
+ffffc088`b6173f06 0000            add     byte ptr [rax],al
+ffffc088`b6173f08 0000            add     byte ptr [rax],al
+ffffc088`b6173f0a 0000            add     byte ptr [rax],al
+ffffc088`b6173f0c 0000            add     byte ptr [rax],al
+ffffc088`b6173f0e 0000            add     byte ptr [rax],al
+ffffc088`b6173f10 0000            add     byte ptr [rax],al
+ffffc088`b6173f12 0000            add     byte ptr [rax],al
+ffffc088`b6173f14 0000            add     byte ptr [rax],al
+ffffc088`b6173f16 0000            add     byte ptr [rax],al
+ffffc088`b6173f18 0000            add     byte ptr [rax],al
+ffffc088`b6173f1a 0000            add     byte ptr [rax],al
+ffffc088`b6173f1c 0000            add     byte ptr [rax],al
+ffffc088`b6173f1e 0000            add     byte ptr [rax],al
+ffffc088`b6173f20 0000            add     byte ptr [rax],al
+ffffc088`b6173f22 0000            add     byte ptr [rax],al
+ffffc088`b6173f24 0000            add     byte ptr [rax],al
+ffffc088`b6173f26 0000            add     byte ptr [rax],al
+ffffc088`b6173f28 0000            add     byte ptr [rax],al
+ffffc088`b6173f2a 0000            add     byte ptr [rax],al
+ffffc088`b6173f2c 0000            add     byte ptr [rax],al
+ffffc088`b6173f2e 0000            add     byte ptr [rax],al
+ffffc088`b6173f30 0000            add     byte ptr [rax],al
+ffffc088`b6173f32 0000            add     byte ptr [rax],al
+ffffc088`b6173f34 0000            add     byte ptr [rax],al
+ffffc088`b6173f36 0000            add     byte ptr [rax],al
+ffffc088`b6173f38 0000            add     byte ptr [rax],al
+ffffc088`b6173f3a 0000            add     byte ptr [rax],al
+ffffc088`b6173f3c 0000            add     byte ptr [rax],al
+ffffc088`b6173f3e 0000            add     byte ptr [rax],al
+ffffc088`b6173f40 0000            add     byte ptr [rax],al
+ffffc088`b6173f42 0000            add     byte ptr [rax],al
+ffffc088`b6173f44 0000            add     byte ptr [rax],al
+ffffc088`b6173f46 0000            add     byte ptr [rax],al
+ffffc088`b6173f48 0000            add     byte ptr [rax],al
+ffffc088`b6173f4a 0000            add     byte ptr [rax],al
+ffffc088`b6173f4c 0000            add     byte ptr [rax],al
+ffffc088`b6173f4e 0000            add     byte ptr [rax],al
+ffffc088`b6173f50 0000            add     byte ptr [rax],al
+ffffc088`b6173f52 0000            add     byte ptr [rax],al
+ffffc088`b6173f54 0000            add     byte ptr [rax],al
+ffffc088`b6173f56 0000            add     byte ptr [rax],al
+ffffc088`b6173f58 0000            add     byte ptr [rax],al
+ffffc088`b6173f5a 0000            add     byte ptr [rax],al
+ffffc088`b6173f5c 0000            add     byte ptr [rax],al
+ffffc088`b6173f5e 0000            add     byte ptr [rax],al
+ffffc088`b6173f60 0000            add     byte ptr [rax],al
+ffffc088`b6173f62 0000            add     byte ptr [rax],al
+ffffc088`b6173f64 0000            add     byte ptr [rax],al
+ffffc088`b6173f66 0000            add     byte ptr [rax],al
+ffffc088`b6173f68 0000            add     byte ptr [rax],al
+ffffc088`b6173f6a 0000            add     byte ptr [rax],al
+ffffc088`b6173f6c 0000            add     byte ptr [rax],al
+ffffc088`b6173f6e 0000            add     byte ptr [rax],al
+ffffc088`b6173f70 0000            add     byte ptr [rax],al
+ffffc088`b6173f72 0902            or      dword ptr [rdx],eax
+ffffc088`b6173f74 4653            push    rbx
+ffffc088`b6173f76 696d0000000000  imul    ebp,dword ptr [rbp],0
+ffffc088`b6173f7d 0000            add     byte ptr [rax],al
+ffffc088`b6173f7f 002c04          add     byte ptr [rsp+rax],ch
+ffffc088`b6173f82 0000            add     byte ptr [rax],al
+ffffc088`b6173f84 78ae            js      ffffc088`b6173f34
+ffffc088`b6173f86 0000            add     byte ptr [rax],al
+ffffc088`b6173f88 0000            add     byte ptr [rax],al
+ffffc088`b6173f8a 0000            add     byte ptr [rax],al
+ffffc088`b6173f8c 0000            add     byte ptr [rax],al
+ffffc088`b6173f8e 0000            add     byte ptr [rax],al
+ffffc088`b6173f90 0000            add     byte ptr [rax],al
+ffffc088`b6173f92 0000            add     byte ptr [rax],al
+ffffc088`b6173f94 0000            add     byte ptr [rax],al
+ffffc088`b6173f96 0000            add     byte ptr [rax],al
+ffffc088`b6173f98 0000            add     byte ptr [rax],al
+ffffc088`b6173f9a 0000            add     byte ptr [rax],al
+ffffc088`b6173f9c 0000            add     byte ptr [rax],al
+ffffc088`b6173f9e 0000            add     byte ptr [rax],al
+ffffc088`b6173fa0 0000            add     byte ptr [rax],al
+ffffc088`b6173fa2 0000            add     byte ptr [rax],al
+ffffc088`b6173fa4 0000            add     byte ptr [rax],al
+ffffc088`b6173fa6 0000            add     byte ptr [rax],al
+ffffc088`b6173fa8 0000            add     byte ptr [rax],al
+ffffc088`b6173faa 0000            add     byte ptr [rax],al
+ffffc088`b6173fac 0000            add     byte ptr [rax],al
+ffffc088`b6173fae 0000            add     byte ptr [rax],al
+ffffc088`b6173fb0 0000            add     byte ptr [rax],al
+ffffc088`b6173fb2 0000            add     byte ptr [rax],al
+ffffc088`b6173fb4 0000            add     byte ptr [rax],al
+ffffc088`b6173fb6 0000            add     byte ptr [rax],al
+ffffc088`b6173fb8 0000            add     byte ptr [rax],al
+ffffc088`b6173fba 0000            add     byte ptr [rax],al
+ffffc088`b6173fbc 0000            add     byte ptr [rax],al
+ffffc088`b6173fbe 0000            add     byte ptr [rax],al
+ffffc088`b6173fc0 0000            add     byte ptr [rax],al
+ffffc088`b6173fc2 0000            add     byte ptr [rax],al
+ffffc088`b6173fc4 0000            add     byte ptr [rax],al
+ffffc088`b6173fc6 0000            add     byte ptr [rax],al
+ffffc088`b6173fc8 0000            add     byte ptr [rax],al
+ffffc088`b6173fca 0000            add     byte ptr [rax],al
+ffffc088`b6173fcc 0000            add     byte ptr [rax],al
+ffffc088`b6173fce 0000            add     byte ptr [rax],al
+ffffc088`b6173fd0 0000            add     byte ptr [rax],al
+ffffc088`b6173fd2 0000            add     byte ptr [rax],al
+ffffc088`b6173fd4 0000            add     byte ptr [rax],al
+ffffc088`b6173fd6 0000            add     byte ptr [rax],al
+ffffc088`b6173fd8 0000            add     byte ptr [rax],al
+ffffc088`b6173fda 0000            add     byte ptr [rax],al
+ffffc088`b6173fdc 0000            add     byte ptr [rax],al
+ffffc088`b6173fde 0000            add     byte ptr [rax],al
+ffffc088`b6173fe0 0000            add     byte ptr [rax],al
+ffffc088`b6173fe2 0000            add     byte ptr [rax],al
+ffffc088`b6173fe4 0000            add     byte ptr [rax],al
+ffffc088`b6173fe6 0000            add     byte ptr [rax],al
+ffffc088`b6173fe8 0000            add     byte ptr [rax],al
+ffffc088`b6173fea 0000            add     byte ptr [rax],al
+ffffc088`b6173fec 0000            add     byte ptr [rax],al
+ffffc088`b6173fee 0000            add     byte ptr [rax],al
+ffffc088`b6173ff0 0000            add     byte ptr [rax],al
+ffffc088`b6173ff2 0000            add     byte ptr [rax],al
+ffffc088`b6173ff4 0000            add     byte ptr [rax],al
+ffffc088`b6173ff6 0000            add     byte ptr [rax],al
+ffffc088`b6173ff8 0000            add     byte ptr [rax],al
+ffffc088`b6173ffa 0000            add     byte ptr [rax],al
+ffffc088`b6173ffc 0000            add     byte ptr [rax],al
+ffffc088`b6173ffe 0000            add     byte ptr [rax],al
+ffffc088`b6174000 4883ec18        sub     rsp,18h
+ffffc088`b6174004 33c0            xor     eax,eax
+ffffc088`b6174006 488b5118        mov     rdx,qword ptr [rcx+18h]
+ffffc088`b617400a 4885d2          test    rdx,rdx
+ffffc088`b617400d 7411            je      ffffc088`b6174020
+ffffc088`b617400f 83792040        cmp     dword ptr [rcx+20h],40h
+ffffc088`b6174013 720b            jb      ffffc088`b6174020
+ffffc088`b6174015 4863423c        movsxd  rax,dword ptr [rdx+3Ch]
+ffffc088`b6174019 8b441008        mov     eax,dword ptr [rax+rdx+8]
+ffffc088`b617401d 890424          mov     dword ptr [rsp],eax
+ffffc088`b6174020 eb05            jmp     ffffc088`b6174027
+ffffc088`b6174022 33c0            xor     eax,eax
+ffffc088`b6174024 890424          mov     dword ptr [rsp],eax
+ffffc088`b6174027 4883c418        add     rsp,18h
+ffffc088`b617402b c3              ret
+ffffc088`b617402c cc              int     3
+ffffc088`b617402d cc              int     3
+ffffc088`b617402e cc              int     3
+ffffc088`b617402f cc              int     3
+ffffc088`b6174030 4883ec48        sub     rsp,48h
+ffffc088`b6174034 488b0df51f0000  mov     rcx,qword ptr [ffffc088`b6176030]
+ffffc088`b617403b 488d542450      lea     rdx,[rsp+50h]
+ffffc088`b6174040 48c744245000000000 mov   qword ptr [rsp+50h],0
+ffffc088`b6174049 e825120000      call    ffffc088`b6175273
+ffffc088`b617404e 4885c0          test    rax,rax
+ffffc088`b6174051 0f841f020000    je      ffffc088`b6174276
+ffffc088`b6174057 48895c2458      mov     qword ptr [rsp+58h],rbx
+ffffc088`b617405c 488b5c2450      mov     rbx,qword ptr [rsp+50h]
+ffffc088`b6174061 4885db          test    rbx,rbx
+ffffc088`b6174064 0f8407020000    je      ffffc088`b6174271
+ffffc088`b617406a 4863433c        movsxd  rax,dword ptr [rbx+3Ch]
+ffffc088`b617406e 813c1850450000  cmp     dword ptr [rax+rbx],4550h
+ffffc088`b6174075 0f85f6010000    jne     ffffc088`b6174271
+ffffc088`b617407b 48897c2440      mov     qword ptr [rsp+40h],rdi
+ffffc088`b6174080 8b7c1850        mov     edi,dword ptr [rax+rbx+50h]
+ffffc088`b6174084 4885db          test    rbx,rbx
+ffffc088`b6174087 0f84df010000    je      ffffc088`b617426c
+ffffc088`b617408d 4c8d05bc200000  lea     r8,[ffffc088`b6176150]
+ffffc088`b6174094 8bd7            mov     edx,edi
+ffffc088`b6174096 488bcb          mov     rcx,rbx
+ffffc088`b6174099 e8620d0000      call    ffffc088`b6174e00
+ffffc088`b617409e 4885c0          test    rax,rax
+ffffc088`b61740a1 0f84c5010000    je      ffffc088`b617426c
+ffffc088`b61740a7 0fb64803        movzx   ecx,byte ptr [rax+3]
+ffffc088`b61740ab 884c2450        mov     byte ptr [rsp+50h],cl
+ffffc088`b61740af 0fb64804        movzx   ecx,byte ptr [rax+4]
+ffffc088`b61740b3 884c2451        mov     byte ptr [rsp+51h],cl
+ffffc088`b61740b7 0fb64805        movzx   ecx,byte ptr [rax+5]
+ffffc088`b61740bb 4c896c2430      mov     qword ptr [rsp+30h],r13
+ffffc088`b61740c0 884c2452        mov     byte ptr [rsp+52h],cl
+ffffc088`b61740c4 0fb64806        movzx   ecx,byte ptr [rax+6]
+ffffc088`b61740c8 884c2453        mov     byte ptr [rsp+53h],cl
+ffffc088`b61740cc 4c636c2450      movsxd  r13,dword ptr [rsp+50h]
+ffffc088`b61740d1 4983c507        add     r13,7
+ffffc088`b61740d5 4c03e8          add     r13,rax
+ffffc088`b61740d8 4c3beb          cmp     r13,rbx
+ffffc088`b61740db 0f8286010000    jb      ffffc088`b6174267
+ffffc088`b61740e1 488d041f        lea     rax,[rdi+rbx]
+ffffc088`b61740e5 4c3be8          cmp     r13,rax
+ffffc088`b61740e8 0f8379010000    jae     ffffc088`b6174267
+ffffc088`b61740ee 4889742468      mov     qword ptr [rsp+68h],rsi
+ffffc088`b61740f3 498b7500        mov     rsi,qword ptr [r13]
+ffffc088`b61740f7 4c89642438      mov     qword ptr [rsp+38h],r12
+ffffc088`b61740fc 41bc00010000    mov     r12d,100h
+ffff8a84`a0352950  ffffc088`c740c080
+ffff8a84`a0352958  ffff8a84`a0352ac0
+ffff8a84`a0352960  00000000`00000000
+ffff8a84`a0352968  ffffc088`b6174006
+ffff8a84`a0352970  00000000`00000010
+ffff8a84`a0352978  00000000`00050246
+ffff8a84`a0352980  ffff8a84`a0352990
+ffff8a84`a0352988  00000000`00000018
+ffff8a84`a0352990  00000000`0014fb38
+ffff8a84`a0352998  00000000`00000030
+ffff8a84`a03529a0  00000000`00000000
+ffff8a84`a03529a8  ffffc088`b6175081
+ffff8a84`a03529b0  00000000`0014f901
+ffff8a84`a03529b8  00000000`0008c000
+ffff8a84`a03529c0  00000000`0014f9a0
+ffff8a84`a03529c8  fffff803`79011505 nt!KiSystemServiceCopyEnd+0x25
+ffff8a84`a03529d0  ffff8a84`a0352ac0
+ffff8a84`a03529d8  fffff803`7923ace5 nt!NtFreeVirtualMemory+0x95
+ffff8a84`a03529e0  00000000`00000000
+ffff8a84`a03529e8  00000000`0014f978
+ffff8a84`a03529f0  00000000`0014fa80
+ffff8a84`a03529f8  00007ff7`80862007
+ffff8a84`a0352a00  00000000`0014fb38
+ffff8a84`a0352a08  008bb600`00000030
+ffff8a84`a0352a10  00000000`00000000
+ffff8a84`a0352a18  00000000`00000000
+ffff8a84`a0352a20  00000000`001c0000
+ffff8a84`a0352a28  00000000`0014fbd0
+ffff8a84`a0352a30  ffffc088`c740c080
+ffff8a84`a0352a38  fffff803`79011505 nt!KiSystemServiceCopyEnd+0x25
+ffff8a84`a0352a40  ffffc088`c740c080
+ffff8a84`a0352a48  00000000`00000000
+ffff8a84`a0352a50  ffff8a84`a0352ac0
+ffff8a84`a0352a58  ffffc088`c740c080
+ffff8a84`a0352a60  00000000`00000000
+ffffc088`b6175070 4053            push    rbx
+ffffc088`b6175072 4881ec80000000  sub     rsp,80h
+ffffc088`b6175079 488bd9          mov     rbx,rcx
+ffffc088`b617507c e87fefffff      call    ffffc088`b6174000
+ffffc088`b6175081 488d15b0110000  lea     rdx,[ffffc088`b6176238]
+ffffc088`b6175088 8905ca1f0000    mov     dword ptr [ffffc088`b6177058],eax
+ffffc088`b617508e 488d4c2440      lea     rcx,[rsp+40h]
+ffffc088`b6173000  68 0a 60 b4 88 c0 ff ff-68 0a 60 b4 88 c0 ff ff  h.`.....h.`.....
+ffffc088`b6173010  40 0a 60 b4 88 c0 ff ff-00 00 00 00 00 00 00 00  @.`.............
+ffffc088`b6176238  5c 00 44 00 65 00 76 00-69 00 63 00 65 00 5c 00  \.D.e.v.i.c.e.\.
+ffffc088`b6176248  52 00 72 00 53 00 76 00-63 00 39 00 34 00 00 00  R.r.S.v.c.9.4...
+quit:
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\atlmfc.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\concurrency.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\cpp_rest.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Kernel.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\ObjectiveC.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\stl.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Usb4Kd.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Data.Json.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Geolocation.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Devices.Sensors.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\Windows.Media.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\windows.natvis'
+NatVis script unloaded from 'C:\Program Files (x86)\Windows Kits\10\Debuggers\x64\Visualizers\winrt.natvis'
