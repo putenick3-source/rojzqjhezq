@@ -2,7 +2,9 @@
 
 External, read-only overlay. Finds `RobRun.exe`, opens a transparent click-through DX11 window over it, draws ImGui ESP (boxes, names, HP bars, distance, snaplines, crosshair, FOV circle).
 
-Pure `ReadProcessMemory` — no injection, no hooks, no writes. All cheat logic lives outside the game process.
+Pure `ReadProcessMemory` — no injection, no hooks, no writes to the game. All cheat logic lives outside the game process. Offsets are runtime values loaded from `RobRunOverlay.ini` and anchored on the `GameAssembly.dll` base.
+
+A build guard cuts the ESP when the live `GameAssembly.dll` version differs from `sdk::kDumpedVersion`.
 
 ## Build
 
@@ -25,25 +27,38 @@ Run **as administrator** if the game is launched with elevation (common on anti-
 
 The overlay attaches automatically and re-attaches if the game is closed and reopened.
 
+## Offsets and build guard
+
+Everything is anchored on the `GameAssembly.dll` module base. Offsets live in `RobRunOverlay.ini` next to the executable and are loaded at startup; missing or invalid keys are rewritten with the compiled defaults (`0x0`). A re-dump only requires editing the INI — no rebuild.
+
+Reference build: `0.7.0.4049` (`sdk::kDumpedVersion` in `src/SDK.h`, which must equal the dumped `GameAssembly.dll` `FileVersion`). At every attach the overlay reads the `GameAssembly.dll` version resource and compares it with that constant:
+
+- match → ESP enabled;
+- mismatch or unreadable version → world snapshot invalidated, ESP cut;
+- the observed version is written to `[Build] CurrentVersion` and `RobRunOverlay.log`.
+
+To support a new build, re-dump the INI, bump `kDumpedVersion`, and rebuild.
+
 ## Filling in the offsets
 
-Everything in the framework is build-agnostic **except** `src/SDK.h`. Each `// FILL:` line is one value to dump against the current `RobRun.exe` build. You need:
+Every key in `RobRunOverlay.ini` is hexadecimal and module-relative to `GameAssembly.dll`:
 
-**Module-relative (static) offsets:**
-- `kLocalPlayer`  — pointer-to-pointer to the local player struct
-- `kEntityList`   — pointer to the array of entity pointers
-- `kEntityCount`  — int: number of active entities (optional; falls back to `kMaxEntities`)
-- `kViewMatrix`   — 4x4 float, row-major view-projection matrix
-- `kGameState`    — int or bool, non-zero in a match (optional)
+**`[Offsets]` (static):**
+- `LocalPlayer` — pointer-to-pointer to the local player struct
+- `EntityList` — pointer to the array of entity pointers
+- `EntityCount` — int: number of active entities (optional; falls back to `kMaxEntities`)
+- `ViewMatrix` — 4x4 float, row-major view-projection matrix
+- `GameState` — int or bool, non-zero in a match (optional)
 
-**Per-entity offsets** (relative to each `Entity*`):
-- `kPosition`   — `Vec3` world position (float x/y/z)
-- `kHealth`, `kMaxHealth` — floats
-- `kTeam`       — int team id
-- `kIsAlive`    — bool / int
-- `kName`       — inline `char[32]` or `char*`
-- `kBonePosHead` — optional, only if you want head boxes / snaplines to head
-- `kVisible`    — optional visibility flag
+**`[Entity]` (relative to each `Entity*`):**
+- `Position` — `Vec3` world position (float x/y/z)
+- `Health`, `MaxHealth` — floats
+- `Team` — int team id
+- `IsAlive` — bool / int
+- `Name` — inline `char[32]` or `char*`
+- `BonePosHead` — optional, only if you want head boxes / snaplines to head
+- `Visible` — optional visibility flag
+- `Rotation` — unused by the current renderer, kept for future work
 
 ### How to find them
 
@@ -51,7 +66,7 @@ Everything in the framework is build-agnostic **except** `src/SDK.h`. Each `// F
 2. **ReClass.NET** — paste the entity pointer, walk the struct interactively. Great for discovering `Position`, `Health`, `Team` fields visually.
 3. **IDA / Ghidra / x64dbg** — for patch-stable signatures. Find the instruction that reads `g_LocalPlayer`, extract the surrounding bytes (10–12 bytes with wildcards on relative operands), feed it to `mem::findPattern` + `mem::resolveRip` at runtime instead of hard-coding the offset. That version survives small patches.
 
-The scanner in `src/Memory.h` accepts IDA-style signatures (`"48 8B 05 ? ? ? ?"`). Swap any raw `kFoo = 0xABC` for a scan at startup once you have a signature.
+The scanner in `src/Memory.h` accepts IDA-style signatures (`"48 8B 05 ? ? ? ?"`). Once a signature is stable it can feed a startup resolver; the resulting address minus the `GameAssembly.dll` base is the INI value to persist.
 
 ## Layout
 
@@ -60,20 +75,24 @@ robrun-overlay/
   CMakeLists.txt
   README.md
   src/
-    main.cpp         entry point, hotkeys, lifecycle
+    main.cpp         entry point, hotkeys, lifecycle, build guard
     Overlay.h/.cpp   DX11 transparent window + ImGui
     ESP.h/.cpp       ESP draws + settings menu
     World.h          one-tick world snapshot (RPM)
-    Process.h        attach, module base, templated RPM
+    Process.h        attach, anchor module base, templated RPM
     Memory.h         IDA-style pattern scan + RIP resolver
-    SDK.h            game offsets (the one file to edit per patch)
-    Math.h           Vec2/Vec3/Matrix4 + world-to-screen
+    SDK.h            anchor module, reference build, offset defaults
+    Offsets.h/.cpp   RobRunOverlay.ini load / save
+    Version.h/.cpp   GameAssembly.dll build guard
+    Log.h            file + debugger diagnostics
+    VecMath.h        Vec2/Vec3/Matrix4 + world-to-screen
     Config.h         runtime settings
 ```
 
 ## Notes
 
-- **External only.** The overlay never writes to the game, never allocates inside it, never injects. Reads are rate-limitable via `Config::readIntervalMs` to keep RPM pressure low.
-- **View matrix layout.** `Math::worldToScreen` assumes row-major. If positions project to the wrong quadrant, your view matrix is column-major — transpose on read or flip the indexing in `worldToScreen`.
+- **External only.** The overlay never writes to the game, never allocates inside it, never injects. The only file it writes is `RobRunOverlay.ini` (and the diagnostic `RobRunOverlay.log`). Reads are rate-limitable via `Config::readIntervalMs` to keep RPM pressure low.
+- **View matrix layout.** `worldToScreen` assumes row-major. If positions project to the wrong quadrant, your view matrix is column-major — transpose on read or flip the indexing in `worldToScreen`.
 - **Entity stride.** Default is `sizeof(void*)` — change in `SDK.h` if the game uses an array of inline structs instead of pointers.
+- **Version guard.** Fail-safe: a missing or unreadable `GameAssembly.dll` version resource counts as a mismatch, so the ESP stays off rather than drawing with stale offsets.
 - **Click-through.** Window is `WS_EX_TRANSPARENT` by default; `setInteractive(true)` flips it off while the menu is open so ImGui can receive input.

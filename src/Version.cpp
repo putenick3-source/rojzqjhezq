@@ -56,7 +56,8 @@ namespace {
 
         wchar_t buf[64]{};
         swprintf_s(buf, L"%u.%u.%u.%u",
-                   HIWORD(info->dwFileVersionMS), LOWORD(info->dwFileVersionMS),
+                   (unsigned)HIWORD(info->dwFileVersionMS),
+                   (unsigned)LOWORD(info->dwFileVersionMS),
                    (unsigned)HIWORD(info->dwFileVersionLS),
                    (unsigned)LOWORD(info->dwFileVersionLS));
         return buf;

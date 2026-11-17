@@ -131,7 +131,6 @@ namespace offsets {
             writeValue(e.section, e.key, fallback);
         }
 
-        writeValue(kSectionBuild, L"DumpedVersion", 0);
         WritePrivateProfileStringW(kSectionBuild, L"DumpedVersion",
                                    sdk::kDumpedVersion, iniPath().c_str());
 
