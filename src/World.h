@@ -10,6 +10,7 @@
 #include "SDK.h"
 #include "VecMath.h"
 #include "Config.h"
+#include "Version.h"
 
 #include <vector>
 #include <string>
@@ -40,9 +41,11 @@ struct WorldSnap {
 
 class World {
 public:
-    // Gate set by the build guard. While false the snapshot stays invalid, so
-    // ESP is cut even if the process is otherwise readable.
-    void setBuildCompatible(bool ok) { buildCompatible_ = ok; }
+    // Verdict set by the build guard. Mismatch cuts the snapshot; Match and
+    // Unknown both allow it.
+    void setBuildVerdict(buildguard::Verdict verdict) {
+        buildVerdict_ = verdict;
+    }
 
     // Read a complete snapshot. Returns true if the snapshot is usable (at
     // least the view matrix + local player resolved).
@@ -130,7 +133,8 @@ public:
             }
         }
 
-        s.valid = buildCompatible_ && (sdk::off::kViewMatrix != 0 && localPtr != 0);
+        s.valid = buildVerdict_ != buildguard::Verdict::Mismatch &&
+                  (sdk::off::kViewMatrix != 0 && localPtr != 0);
 
         {
             std::lock_guard<std::mutex> lk(mtx_);
@@ -147,5 +151,5 @@ public:
 private:
     mutable std::mutex mtx_;
     WorldSnap          snap_;
-    bool               buildCompatible_ = false;
+    buildguard::Verdict buildVerdict_ = buildguard::Verdict::Unknown;
 };

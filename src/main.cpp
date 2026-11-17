@@ -26,9 +26,13 @@
 #include "Version.h"
 #include "Log.h"
 
+#include "imgui.h"
+#include "imgui_internal.h"
+
 #include <chrono>
 #include <thread>
 #include <atomic>
+#include <cstdio>
 
 namespace {
 
@@ -49,10 +53,43 @@ namespace {
     }
 
     // Re-evaluates the build guard and gates the world snapshot accordingly.
-    void applyBuildGuard(const Process& proc, World& world) {
+    void applyBuildGuard(const Process& proc, World& world,
+                         buildguard::Verdict& verdict) {
         const buildguard::Status status = buildguard::check(proc);
-        world.setBuildCompatible(status.compatible);
+        verdict = status.verdict;
+        world.setBuildVerdict(status.verdict);
         buildguard::record(status);
+    }
+
+    // Small status pill inside the config menu (ESP.cpp is left untouched).
+    void drawBuildBadge(buildguard::Verdict verdict) {
+        ImGuiWindow* menu = ImGui::FindWindowByName("Rob Run Overlay");
+        if (!menu || menu->Collapsed) return;
+
+        const char* text = "build non identifiee";
+        char matchText[64]{};
+        std::snprintf(matchText, sizeof(matchText), "build %ls OK",
+                      sdk::kDumpedVersion);
+        ImU32 color = IM_COL32(255, 170, 40, 255); // Unknown: orange
+        if (verdict == buildguard::Verdict::Match) {
+            text = matchText;
+            color = IM_COL32(90, 220, 120, 255);
+        } else if (verdict == buildguard::Verdict::Mismatch) {
+            text = "build divergente";
+            color = IM_COL32(255, 90, 90, 255);
+        }
+
+        const ImVec2 size = ImGui::CalcTextSize(text);
+        float x = menu->Pos.x + menu->Size.x - size.x - 20.0f;
+        const float minX = menu->Pos.x + 10.0f;
+        if (x < minX) x = minX;
+        const float y = menu->Pos.y + 10.0f;
+
+        ImDrawList* dl = ImGui::GetForegroundDrawList();
+        dl->AddRectFilled({ x - 6.0f, y - 3.0f },
+                          { x + size.x + 6.0f, y + size.y + 3.0f },
+                          IM_COL32(15, 15, 15, 215), 4.0f);
+        dl->AddText({ x, y }, color, text);
     }
 
 }
@@ -74,7 +111,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     if (!waitForProcess(proc, running)) return 0;
 
     World world;
-    applyBuildGuard(proc, world);
+    buildguard::Verdict verdict = buildguard::Verdict::Unknown;
+    applyBuildGuard(proc, world, verdict);
 
     Overlay overlay;
     if (!overlay.create(sdk::kWindowName)) {
@@ -100,10 +138,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // --- Process liveness ---
         if (!proc.stillAlive()) {
-            world.setBuildCompatible(false);
+            verdict = buildguard::Verdict::Unknown;
+            world.setBuildVerdict(verdict);
             proc.detach();
             if (!waitForProcess(proc, running)) break;
-            applyBuildGuard(proc, world);
+            applyBuildGuard(proc, world, verdict);
         }
 
         // --- Window geometry sync (lightweight; every ~200 ms) ---
@@ -131,6 +170,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
             if (cfg.showMenu) {
                 esp::drawMenu(cfg);
+                drawBuildBadge(verdict);
             }
         });
         overlay.endFrame();

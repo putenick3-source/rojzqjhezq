@@ -18,9 +18,10 @@ namespace sdk {
     inline constexpr const wchar_t* kWindowName  = L"Rob Run";          // visible window title; adjust if different
     inline constexpr const wchar_t* kAnchorModule = L"GameAssembly.dll"; // module whose base offsets are relative to
 
-    // Build the offsets below were dumped against. If the live GameAssembly.dll
-    // version differs, the ESP is cut until the INI has been re-dumped.
-    inline constexpr const wchar_t* kDumpedVersion = L"0.7.0.4049";
+    // Build the offsets below were dumped against. Only the "major.minor.build"
+    // prefix is compared, so revisions do not trip the guard. On mismatch the
+    // ESP is cut until the INI has been re-dumped.
+    inline constexpr const wchar_t* kDumpedVersion = L"0.7.0";
 
     // ---- Module-relative offsets --------------------------------------------
     // Resolved as: GameAssembly.dll base + offset -> (optional pointer chain)

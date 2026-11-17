@@ -1,9 +1,14 @@
-// Version.h - Build guard for the dumped GameAssembly.dll.
+// Version.h - Build guard for the dumped game build.
 //
-// The overlay refuses to draw ESP when the live GameAssembly.dll build differs
-// from sdk::kDumpedVersion (offsets would be meaningless). Detection uses the
-// DLL's version resource, read from the RobRun.exe directory; it never touches
-// the game process beyond OpenProcess query rights.
+// The reference version is the game's own build number (e.g. "0.7.0"), read
+// from the process executable's FileVersion resource. If that resource is
+// missing, the GameAssembly.dll resource is tried as a fallback. Only the
+// "major.minor.build" prefix is compared; the revision is ignored.
+//
+// Three explicit verdicts:
+//   Unknown  - version unreadable (ESP stays enabled, orange badge)
+//   Match    - prefix equals sdk::kDumpedVersion (green badge)
+//   Mismatch - prefix differs (WorldSnap::valid forced false, ESP cut)
 
 #pragma once
 #include "Process.h"
@@ -12,16 +17,27 @@
 
 namespace buildguard {
 
-    struct Status {
-        bool         compatible = false;
-        std::wstring current;    // empty when the version resource is unreadable
-        std::wstring modulePath;
+    enum class Verdict {
+        Unknown,
+        Match,
+        Mismatch,
     };
 
-    // Reads the live build version and compares it with sdk::kDumpedVersion.
+    struct Status {
+        Verdict      verdict = Verdict::Unknown;
+        std::wstring current;    // empty when no version resource is readable
+        std::wstring sourcePath; // file the version was read from
+    };
+
+    // Reads the live build version (EXE first, anchor module fallback) and
+    // classifies it against sdk::kDumpedVersion.
     Status check(const Process& proc);
 
-    // Persists the observed version in RobRunOverlay.ini and logs the verdict.
+    // Persists the observed version and verdict in RobRunOverlay.ini and logs.
     void record(const Status& status);
 
+    // Stable INI/log spelling for a verdict.
+    const wchar_t* verdictName(Verdict verdict);
+
 }
+

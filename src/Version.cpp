@@ -1,4 +1,4 @@
-// Version.cpp - GameAssembly.dll version detection.
+// Version.cpp - Build version detection (EXE first, anchor module fallback).
 
 #include "Version.h"
 #include "Offsets.h"
@@ -11,6 +11,7 @@
 #include <windows.h>
 #include <winver.h>
 
+#include <cstring>
 #include <vector>
 
 #pragma comment(lib, "version.lib")
@@ -63,29 +64,66 @@ namespace {
         return buf;
     }
 
+    void logVersionFailure(const wchar_t* what, const std::wstring& path) {
+        if (path.empty()) {
+            diag::log(L"buildguard: chemin %s introuvable, verdict Unknown", what);
+        } else {
+            diag::log(L"buildguard: aucune ressource de version dans %s, verdict Unknown",
+                      path.c_str());
+        }
+    }
+
 }
 
 namespace buildguard {
 
+    const wchar_t* verdictName(Verdict verdict) {
+        switch (verdict) {
+        case Verdict::Match:    return L"Match";
+        case Verdict::Mismatch: return L"Mismatch";
+        case Verdict::Unknown:
+        default:                return L"Unknown";
+        }
+    }
+
     Status check(const Process& proc) {
         Status status;
-        status.modulePath = siblingModule(imagePath(proc), sdk::kAnchorModule);
-        if (status.modulePath.empty() ||
-            GetFileAttributesW(status.modulePath.c_str()) == INVALID_FILE_ATTRIBUTES) {
-            diag::log(L"buildguard: %s introuvable, ESP coupe", sdk::kAnchorModule);
-            return status;
-        }
 
-        status.current = fileVersion(status.modulePath);
+        const std::wstring exe = imagePath(proc);
+        status.current = fileVersion(exe);
+        status.sourcePath = exe;
+
         if (status.current.empty()) {
-            diag::log(L"buildguard: version illisible dans %s, ESP coupe",
-                      status.modulePath.c_str());
+            const std::wstring module = siblingModule(exe, sdk::kAnchorModule);
+            status.current = fileVersion(module);
+            status.sourcePath = module;
+
+            if (!status.current.empty()) {
+                diag::log(L"buildguard: version lue en repli dans %s",
+                          module.c_str());
+            } else {
+                logVersionFailure(L"exe/module", exe);
+            }
+        }
+
+        if (status.current.empty()) {
+            status.verdict = Verdict::Unknown;
             return status;
         }
 
-        status.compatible =
-            _wcsicmp(status.current.c_str(), sdk::kDumpedVersion) == 0;
-        if (!status.compatible) {
+        // Compare only "major.minor.build"; the revision is ignored.
+        const size_t prefixLen = std::wcslen(sdk::kDumpedVersion);
+        const bool prefixMatch =
+            status.current.rfind(sdk::kDumpedVersion, 0) == 0 &&
+            (status.current.size() == prefixLen ||
+             status.current[prefixLen] == L'.');
+
+        status.verdict = prefixMatch ? Verdict::Match : Verdict::Mismatch;
+
+        if (status.verdict == Verdict::Match) {
+            diag::log(L"buildguard: build %s conforme (%s ignoree)",
+                      status.current.c_str(), sdk::kDumpedVersion);
+        } else {
             diag::log(L"buildguard: build %s != %s, ESP coupe",
                       status.current.c_str(), sdk::kDumpedVersion);
         }
@@ -100,10 +138,9 @@ namespace buildguard {
                                    status.current.empty() ? L"unknown"
                                                           : status.current.c_str(),
                                    ini.c_str());
-
-        if (status.compatible) {
-            diag::log(L"buildguard: build %s conforme", status.current.c_str());
-        }
+        WritePrivateProfileStringW(L"Build", L"Verdict",
+                                   verdictName(status.verdict), ini.c_str());
     }
 
 }
+
