@@ -1,7 +1,7 @@
 // Version.cpp - Build version detection (EXE first, anchor module fallback).
 
 #include "Version.h"
-#include "Offsets.h"
+#include "Config.h"
 #include "SDK.h"
 #include "Log.h"
 
@@ -131,7 +131,7 @@ namespace buildguard {
     }
 
     void record(const Status& status) {
-        const std::wstring ini = offsets::iniPath();
+        const std::wstring ini = config::iniPath();
         WritePrivateProfileStringW(L"Build", L"DumpedVersion",
                                    sdk::kDumpedVersion, ini.c_str());
         WritePrivateProfileStringW(L"Build", L"CurrentVersion",

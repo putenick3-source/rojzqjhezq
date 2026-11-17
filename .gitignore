@@ -1,6 +1,7 @@
 # Build output
 build/
 build_*/
+build_fresh/
 dist/
 out/
 cmake-build-*/
@@ -10,6 +11,9 @@ cmake-build-*/
 *.ilk
 *.exp
 *.lib
+
+# Runtime files
+*.log
 
 # Vendor (fetched by CI / local build)
 vendor/

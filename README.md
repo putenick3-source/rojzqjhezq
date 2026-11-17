@@ -29,19 +29,20 @@ The overlay attaches automatically and re-attaches if the game is closed and reo
 
 ## Offsets and build guard
 
-Everything is anchored on the `GameAssembly.dll` module base. Offsets live in `RobRunOverlay.ini` next to the executable and are loaded at startup; missing or invalid keys are rewritten with the compiled defaults (`0x0`). A re-dump only requires editing the INI — no rebuild.
+Everything is anchored on the `GameAssembly.dll` module base. Offsets and display settings share one persisted file, `RobRunOverlay.ini`, owned by `Config.h/.cpp`; missing or invalid keys are rewritten with the defaults (`0x0` for offsets). A re-dump only requires editing the INI — no rebuild.
 
-Reference build: `0.7.0.4049` (`sdk::kDumpedVersion` in `src/SDK.h`, which must equal the dumped `GameAssembly.dll` `FileVersion`). At every attach the overlay reads the `GameAssembly.dll` version resource and compares it with that constant:
+Reference prefix: `0.7.0` (`sdk::kDumpedVersion` in `src/SDK.h`). At every attach the overlay reads the process EXE's `FileVersion` (fallback: `GameAssembly.dll`) and compares only `major.minor.build`, ignoring the revision:
 
-- match → ESP enabled;
-- mismatch or unreadable version → world snapshot invalidated, ESP cut;
-- the observed version is written to `[Build] CurrentVersion` and `RobRunOverlay.log`.
+- matching prefix → ESP enabled, green badge;
+- different prefix → world snapshot invalidated, ESP cut, red badge;
+- unreadable version → verdict `Unknown`, ESP allowed, orange badge;
+- the observed version and verdict are written to `[Build]` and `RobRunOverlay.log`.
 
 To support a new build, re-dump the INI, bump `kDumpedVersion`, and rebuild.
 
 ## Filling in the offsets
 
-Every key in `RobRunOverlay.ini` is hexadecimal and module-relative to `GameAssembly.dll`:
+Every offset key in `[Offsets]` / `[Entity]` is hexadecimal and module-relative to `GameAssembly.dll`:
 
 **`[Offsets]` (static):**
 - `LocalPlayer` — pointer-to-pointer to the local player struct
@@ -82,11 +83,10 @@ robrun-overlay/
     Process.h        attach, anchor module base, templated RPM
     Memory.h         IDA-style pattern scan + RIP resolver
     SDK.h            anchor module, reference build, offset defaults
-    Offsets.h/.cpp   RobRunOverlay.ini load / save
-    Version.h/.cpp   GameAssembly.dll build guard
+    Version.h/.cpp   build guard (EXE version, three verdicts)
     Log.h            file + debugger diagnostics
     VecMath.h        Vec2/Vec3/Matrix4 + world-to-screen
-    Config.h         runtime settings
+    Config.h/.cpp    single INI persistence (settings + offsets)
 ```
 
 ## Notes
@@ -94,5 +94,5 @@ robrun-overlay/
 - **External only.** The overlay never writes to the game, never allocates inside it, never injects. The only file it writes is `RobRunOverlay.ini` (and the diagnostic `RobRunOverlay.log`). Reads are rate-limitable via `Config::readIntervalMs` to keep RPM pressure low.
 - **View matrix layout.** `worldToScreen` assumes row-major. If positions project to the wrong quadrant, your view matrix is column-major — transpose on read or flip the indexing in `worldToScreen`.
 - **Entity stride.** Default is `sizeof(void*)` — change in `SDK.h` if the game uses an array of inline structs instead of pointers.
-- **Version guard.** Fail-safe: a missing or unreadable `GameAssembly.dll` version resource counts as a mismatch, so the ESP stays off rather than drawing with stale offsets.
+- **Version guard.** The EXE resource is authoritative; `GameAssembly.dll` is only a fallback. An unreadable version is `Unknown` (ESP allowed), never a false cut.
 - **Click-through.** Window is `WS_EX_TRANSPARENT` by default; `setInteractive(true)` flips it off while the menu is open so ImGui can receive input.

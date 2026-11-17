@@ -45,7 +45,7 @@ add_executable(RobRunOverlay WIN32
     src/main.cpp
     src/Overlay.cpp
     src/ESP.cpp
-    src/Offsets.cpp
+    src/Config.cpp
     src/Version.cpp
     ${IMGUI_SOURCES}
 )

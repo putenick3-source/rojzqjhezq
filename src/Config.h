@@ -1,7 +1,12 @@
-// Config.h - Runtime-toggleable cheat settings. Rendered as the ImGui menu.
+// Config.h - Single owner of RobRunOverlay.ini (display settings + offsets).
+//
+// The INI is the only persisted file and the only format: offsets (hex,
+// module-relative to GameAssembly.dll), display settings and build state all
+// live in it. Offsets are read/written by Config.cpp on behalf of SDK.h.
 
 #pragma once
 #include <cstdint>
+#include <string>
 
 struct Config {
     // Master
@@ -46,3 +51,18 @@ inline Config& gConfig() {
     static Config c;
     return c;
 }
+
+namespace config {
+
+    // Absolute path of RobRunOverlay.ini (next to the executable).
+    std::wstring iniPath();
+
+    // Creates the INI if absent, loads settings + offsets, and persists any
+    // missing or invalid key. Returns false only if the file cannot be created.
+    bool load();
+
+    // Persists current settings + offsets.
+    bool save();
+
+}
+

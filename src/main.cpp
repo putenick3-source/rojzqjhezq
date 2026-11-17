@@ -22,7 +22,6 @@
 #include "ESP.h"
 #include "Config.h"
 #include "SDK.h"
-#include "Offsets.h"
 #include "Version.h"
 #include "Log.h"
 
@@ -102,9 +101,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     std::atomic<bool> running{ true };
 
     diag::log(L"demarrage - build de reference %s, offsets: %s",
-              sdk::kDumpedVersion, offsets::iniPath().c_str());
-    if (!offsets::load()) {
-        diag::log(L"offsets: echec du chargement, ESP inactif");
+              sdk::kDumpedVersion, config::iniPath().c_str());
+    if (!config::load()) {
+        diag::log(L"config: echec du chargement, ESP inactif");
     }
 
     Process proc;
@@ -176,6 +175,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         overlay.endFrame();
     }
 
+    config::save();
     overlay.destroy();
     proc.detach();
     return 0;
