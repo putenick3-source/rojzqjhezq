@@ -9,6 +9,7 @@
 #include "Process.h"
 #include "SDK.h"
 #include "VecMath.h"
+#include "Camera.h"
 #include "Config.h"
 #include "Version.h"
 
@@ -32,7 +33,7 @@ struct EntitySnap {
 struct WorldSnap {
     bool           valid          = false;
     bool           inMatch        = true;
-    Matrix4        viewMatrix     {};
+    Camera         cam            {};
     Vec3           localPos       {};
     int            localTeam      = sdk::kFallbackLocalTeam;
     uintptr_t      localAddress   = 0;
@@ -47,9 +48,10 @@ public:
         buildVerdict_ = verdict;
     }
 
-    // Read a complete snapshot. Returns true if the snapshot is usable (at
-    // least the view matrix + local player resolved).
-    bool refresh(const Process& proc) {
+    // Read a complete snapshot. Returns true if the snapshot is usable (camera
+    // usable + local player resolved). `vp` is the view-projection found by the
+    // caller; it is copied into the camera and validated per snapshot.
+    bool refresh(const Process& proc, const Projection& vp) {
         WorldSnap s{};
 
         if (!proc.isAttached()) {
@@ -58,10 +60,8 @@ public:
             return false;
         }
 
-        // View matrix
-        if (sdk::off::kViewMatrix) {
-            proc.read<Matrix4>(proc.base() + sdk::off::kViewMatrix, s.viewMatrix);
-        }
+        s.cam.vp   = vp;
+        s.cam.mode = gConfig().manualCam ? CamMode::Manual : CamMode::ViewProj;
 
         // Game state (optional) — bail early if clearly not in match
         if (sdk::off::kGameState) {
@@ -76,11 +76,14 @@ public:
         if (sdk::off::kLocalPlayer) {
             proc.read<uintptr_t>(proc.base() + sdk::off::kLocalPlayer, localPtr);
         }
+        bool localPosOk = false;
         if (localPtr) {
             s.localAddress = localPtr;
-            proc.read<Vec3>(localPtr + sdk::ent::kPosition, s.localPos);
+            localPosOk = readPosition(proc, localPtr, s.localPos);
             proc.read<int>(localPtr + sdk::ent::kTeam, s.localTeam);
         }
+        // Manual camera sits on the local player; yaw/pitch stay caller-driven.
+        if (localPosOk) s.cam.pos = s.localPos;
 
         // Entity list
         uintptr_t listPtr = 0;
@@ -103,7 +106,8 @@ public:
                 EntitySnap e;
                 e.address = ent;
 
-                proc.read<Vec3>(ent + sdk::ent::kPosition, e.pos);
+                if (!readPosition(proc, ent, e.pos)) continue;
+
                 proc.read<float>(ent + sdk::ent::kHealth, e.hp);
                 proc.read<float>(ent + sdk::ent::kMaxHealth, e.maxHp);
                 if (e.maxHp <= 0.f) e.maxHp = 100.f;
@@ -118,11 +122,7 @@ public:
                 if (sdk::ent::kVisible) proc.read<int>(ent + sdk::ent::kVisible, vis);
                 e.visible = vis != 0;
 
-                if (sdk::ent::kBonePosHead) {
-                    proc.read<Vec3>(ent + sdk::ent::kBonePosHead, e.head);
-                } else {
-                    e.head = { e.pos.x, e.pos.y, e.pos.z + 1.8f }; // fallback: assume ~1.8m tall
-                }
+                e.head = readHead(proc, ent, e.pos);
 
                 if (sdk::ent::kName) {
                     e.name = proc.readInlineString(ent + sdk::ent::kName, 32);
@@ -133,8 +133,11 @@ public:
             }
         }
 
-        s.valid = buildVerdict_ != buildguard::Verdict::Mismatch &&
-                  (sdk::off::kViewMatrix != 0 && localPtr != 0);
+        s.valid = buildVerdict_ != buildguard::Verdict::Mismatch && localPtr != 0 &&
+                  localPosOk &&
+                  (s.cam.mode == CamMode::Manual
+                       ? sane(s.cam.pos, kSaneWorld)
+                       : (vp.addr != 0 && s.cam.vp.valid()));
 
         {
             std::lock_guard<std::mutex> lk(mtx_);
@@ -149,6 +152,42 @@ public:
     }
 
 private:
+    static constexpr float kSaneWorld = 100000.f;
+
+    // Reads an entity position: transform indirection when both offsets are
+    // known, otherwise the direct position offset. Rejects insane vectors.
+    static bool readPosition(const Process& proc, uintptr_t ent, Vec3& out) {
+        if (sdk::ent::kTransform && sdk::ent::kTransformPos) {
+            uintptr_t transform = 0;
+            if (proc.read<uintptr_t>(ent + sdk::ent::kTransform, transform) &&
+                transform &&
+                proc.read<Vec3>(transform + sdk::ent::kTransformPos, out) &&
+                sane(out, kSaneWorld)) {
+                return true;
+            }
+        }
+        return sdk::ent::kPosition &&
+               proc.read<Vec3>(ent + sdk::ent::kPosition, out) &&
+               sane(out, kSaneWorld);
+    }
+
+    // Head position: kHead, then the legacy bone offset, then feet + boxHeight.
+    static Vec3 readHead(const Process& proc, uintptr_t ent, const Vec3& pos) {
+        Vec3 head{};
+        if (sdk::ent::kHead &&
+            proc.read<Vec3>(ent + sdk::ent::kHead, head) && sane(head, kSaneWorld)) {
+            return head;
+        }
+        if (sdk::ent::kBonePosHead &&
+            proc.read<Vec3>(ent + sdk::ent::kBonePosHead, head) &&
+            sane(head, kSaneWorld)) {
+            return head;
+        }
+        head = pos;
+        head.z += gConfig().boxHeight;
+        return head;
+    }
+
     mutable std::mutex mtx_;
     WorldSnap          snap_;
     buildguard::Verdict buildVerdict_ = buildguard::Verdict::Unknown;
