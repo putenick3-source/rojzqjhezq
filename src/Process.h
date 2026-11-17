@@ -15,6 +15,8 @@
 #include <cstdint>
 #include <type_traits>
 
+#include "DriverClient.h"
+
 #pragma comment(lib, "psapi.lib")
 
 class Process {
@@ -25,28 +27,42 @@ public:
         detach();
     }
 
-    // Finds a running process by executable name (case-insensitive) and opens
-    // a handle with read + query rights. `anchorModule` is the module the
-    // offsets are relative to (defaults to the executable itself) — for IL2CPP
-    // titles this is GameAssembly.dll. Returns true on success.
+    // Finds a running process by executable name and anchor module. The driver
+    // is preferred when loaded; RPM remains the fallback. `anchorModule` is the
+    // module offsets are relative to (defaults to the executable itself).
     bool attach(const wchar_t* exeName, const wchar_t* anchorModule = nullptr) {
         detach();
 
         const DWORD pid = findPid(exeName);
         if (!pid) return false;
 
-        HANDLE h = OpenProcess(
-            PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
-            FALSE,
-            pid);
-        if (!h) return false;
-
-        pid_    = pid;
-        handle_ = h;
+        pid_ = pid;
+        // Kept even when the driver answers: VirtualQueryEx backs regions().
+        handle_    = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
+                                 FALSE, pid);
+        useDriver_ = drv_.open(pid);
+        if (!handle_ && !useDriver_) {
+            detach();
+            return false;
+        }
 
         const wchar_t* anchor =
             (anchorModule && *anchorModule) ? anchorModule : exeName;
-        if (!resolveModule(anchor, moduleBase_, moduleSize_)) {
+
+        bool resolved = false;
+        if (useDriver_) {
+            uintptr_t base = 0;
+            size_t    size = 0;
+            if (drv_.moduleBase(anchor, base, size)) {
+                moduleBase_ = base;
+                moduleSize_ = size;
+                resolved    = true;
+            }
+        }
+        if (!resolved && handle_) {
+            resolved = resolveModule(anchor, moduleBase_, moduleSize_);
+        }
+        if (!resolved) {
             detach();
             return false;
         }
@@ -58,12 +74,15 @@ public:
             CloseHandle(handle_);
             handle_ = nullptr;
         }
+        drv_.close();
+        useDriver_  = false;
         pid_        = 0;
         moduleBase_ = 0;
         moduleSize_ = 0;
     }
 
-    bool isAttached() const { return handle_ != nullptr; }
+    bool isAttached() const { return handle_ != nullptr || useDriver_; }
+    bool usesDriver() const { return useDriver_; }
     DWORD pid()        const { return pid_; }
     HANDLE handle()    const { return handle_; }
     uintptr_t base()   const { return moduleBase_; }
@@ -75,9 +94,11 @@ public:
     };
 
     // True when [address, address + bytes) is committed, readable and not
-    // guarded. Cheaper and safer than probing with ReadProcessMemory.
+    // guarded. Driver-only sessions cannot query mappings, so a non-zero
+    // address is trusted and the read result decides.
     bool validate(uintptr_t address, size_t bytes) const {
-        if (!handle_ || !address || !bytes) return false;
+        if (!address || !bytes) return false;
+        if (!handle_) return useDriver_;
         uintptr_t cur = address;
         while (cur < address + bytes) {
             MEMORY_BASIC_INFORMATION mbi{};
@@ -91,8 +112,8 @@ public:
         return true;
     }
 
-    // Enumerates readable committed regions. `budget` caps the total bytes
-    // reported (0 = everything); it keeps game-sized scans bounded.
+    // Enumerates readable committed regions. Needs the RPM handle; driver-only
+    // sessions return nothing. `budget` caps the reported bytes (0 = all).
     std::vector<Region> regions(size_t budget = 0) const {
         std::vector<Region> out;
         if (!handle_) return out;
@@ -129,10 +150,15 @@ public:
     // Confirms the process is still running. Call periodically from the main
     // loop so the overlay can re-attach when the game exits / restarts.
     bool stillAlive() const {
-        if (!handle_) return false;
-        DWORD code = 0;
-        if (!GetExitCodeProcess(handle_, &code)) return false;
-        return code == STILL_ACTIVE;
+        if (handle_) {
+            DWORD code = 0;
+            if (!GetExitCodeProcess(handle_, &code)) return false;
+            return code == STILL_ACTIVE;
+        }
+        if (!useDriver_) return false;
+        // Driver-only: a read of the anchor base is the cheapest liveness probe.
+        uint32_t probe = 0;
+        return drv_.read(moduleBase_, &probe, sizeof(probe));
     }
 
     // --- Typed memory reads ---
@@ -140,7 +166,9 @@ public:
     template <typename T>
     bool read(uintptr_t address, T& out) const {
         static_assert(std::is_trivially_copyable_v<T>, "T must be POD-like");
-        if (!handle_ || !address) return false;
+        if (!address) return false;
+        if (useDriver_) return drv_.read(address, &out, sizeof(T));
+        if (!handle_) return false;
         SIZE_T n = 0;
         return ReadProcessMemory(handle_, (LPCVOID)address, &out, sizeof(T), &n)
             && n == sizeof(T);
@@ -153,7 +181,9 @@ public:
     }
 
     bool readRaw(uintptr_t address, void* buffer, size_t bytes) const {
-        if (!handle_ || !address || !buffer) return false;
+        if (!address || !buffer) return false;
+        if (useDriver_) return drv_.read(address, buffer, bytes);
+        if (!handle_) return false;
         SIZE_T n = 0;
         return ReadProcessMemory(handle_, (LPCVOID)address, buffer, bytes, &n)
             && n == bytes;
@@ -176,7 +206,7 @@ public:
     // Reads a fixed-size inline char string at address (NUL-terminated or
     // padded). Safe against unreadable memory.
     std::string readInlineString(uintptr_t address, size_t maxLen = 32) const {
-        if (!handle_ || !address) return {};
+        if (!address) return {};
         std::vector<char> buf(maxLen + 1, 0);
         if (!readRaw(address, buf.data(), maxLen)) return {};
         buf[maxLen] = '\0';
@@ -249,4 +279,6 @@ private:
     HANDLE    handle_     = nullptr;
     uintptr_t moduleBase_ = 0;
     size_t    moduleSize_ = 0;
+    DriverClient drv_;
+    bool      useDriver_  = false;
 };
