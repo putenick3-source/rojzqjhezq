@@ -57,6 +57,14 @@ namespace sdk {
         inline uintptr_t kIsLocal       = 0x0;   // INI: IsLocal       bool flag, OR compare address to LocalPlayer
         inline uintptr_t kBonePosHead   = 0x0;   // INI: BonePosHead   optional, for head-aim / head box
         inline uintptr_t kVisible       = 0x0;   // INI: Visible       optional visibility flag
+
+        // Optional transform indirection: `Transform*` at this offset, world
+        // position at kTransformPos inside it. Preferred over kPosition when set.
+        inline uintptr_t kTransform     = 0x0;   // INI: Transform     Entity* + this -> Transform*
+        inline uintptr_t kTransformPos  = 0x0;   // INI: TransformPos  Transform* + this -> Vec3
+
+        // Optional head position (bone or head collider), relative to the Entity*.
+        inline uintptr_t kHead          = 0x0;   // INI: Head          Vec3 head position
     }
 
     // Entity list stride — size of each pointer slot. Usually sizeof(void*) = 8.
