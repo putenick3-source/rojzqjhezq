@@ -1,0 +1,31 @@
+# Build output
+build/
+dist/
+out/
+cmake-build-*/
+*.exe
+*.pdb
+*.obj
+*.ilk
+*.exp
+*.lib
+
+# Vendor (fetched by CI / local build)
+vendor/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.sln.docstates
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Makefile
+
+# OS
+Thumbs.db
+.DS_Store
