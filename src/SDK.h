@@ -14,8 +14,8 @@
 namespace sdk {
 
     // ---- Process targeting ---------------------------------------------------
-    inline constexpr const wchar_t* kProcessName = L"RobRun.exe";
-    inline constexpr const wchar_t* kWindowName  = L"Rob Run";          // visible window title; adjust if different
+    inline constexpr const wchar_t* kProcessName = L"ROB RUN.exe";
+    inline constexpr const wchar_t* kWindowName  = L"ROB RUN";          // visible window title; adjust if different
     inline constexpr const wchar_t* kAnchorModule = L"GameAssembly.dll"; // module whose base offsets are relative to
 
     // Build the offsets below were dumped against. Only the "major.minor.build"
@@ -77,4 +77,5 @@ namespace sdk {
     // Read dynamically from the local player; this is just a fallback.
     inline constexpr int kFallbackLocalTeam = -1;
 }
+
 
