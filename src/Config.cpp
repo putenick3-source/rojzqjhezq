@@ -245,7 +245,11 @@ namespace {
 
 namespace config {
 
-    std::wstring iniPath() { return diag::exeDir() + L"RobRunOverlay.ini"; }
+    std::wstring iniPath() {
+        std::wstring dir = diag::exeDir();
+        if (!dir.empty() && dir.back() != L'\\') dir += L'\\';
+        return dir + L"RobRunOverlay.ini";
+    }
 
     bool load() {
         if (!ensureFile()) return false;
