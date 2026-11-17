@@ -31,7 +31,7 @@ typedef PVOID(NTAPI* RR_ALLOC_INDEP)(SIZE_T);
 typedef VOID(NTAPI* RR_FREE_INDEP)(PVOID, SIZE_T);
 
 // Toggle to disable the unload-time trace scrub without rebuilding the rest.
-bool RR_CLEAN_TRACES = true;
+bool RR_CLEAN_TRACES = false;
 
 static PVOID          g_Staging = nullptr;
 static BOOLEAN        g_StagingIsPool = false;
@@ -641,3 +641,4 @@ extern "C" NTSTATUS DriverEntry(PDRIVER_OBJECT drv, PUNICODE_STRING path) {
     rr_drop_headers(drv);
     return STATUS_SUCCESS;
 }
+
