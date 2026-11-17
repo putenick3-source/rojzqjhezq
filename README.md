@@ -58,8 +58,14 @@ Every offset key in `[Offsets]` / `[Entity]` is hexadecimal and module-relative 
 - `IsAlive` — bool / int
 - `Name` — inline `char[32]` or `char*`
 - `BonePosHead` — optional, only if you want head boxes / snaplines to head
+- `Head` — optional `Vec3` head position, preferred over `BonePosHead`
+- `Transform` / `TransformPos` — optional indirection: `Transform*` at `Transform`, `Vec3` at `TransformPos` inside it; preferred over `Position`
 - `Visible` — optional visibility flag
 - `Rotation` — unused by the current renderer, kept for future work
+
+### Dumper tab
+
+The menu has a **Dumper** tab (RPM only) to help fill those values: scan a float (with tolerance) or int, page through the hits, run the aligned-pointer and view-projection heuristics, then assign a hit to an offset. Assignment stores `hit - baseEntity` (base = local player address) and `ViewMatrix`/`EntityList` assignments store `address - GameAssembly.dll base`. Values live in memory until the INI is written on exit.
 
 ### How to find them
 
@@ -85,14 +91,18 @@ robrun-overlay/
     SDK.h            anchor module, reference build, offset defaults
     Version.h/.cpp   build guard (EXE version, three verdicts)
     Log.h            file + debugger diagnostics
-    VecMath.h        Vec2/Vec3/Matrix4 + world-to-screen
+    VecMath.h        Vec2/Vec3 + sane();
+    Projection.h     Mat4 view-projection read + validity checks
+    Camera.h         view-projection or manual projection source
+    Scan.h           resumable value scan, pointer-array / VP heuristics
+    Dumper.h         state backing the Dumper tab
     Config.h/.cpp    single INI persistence (settings + offsets)
 ```
 
 ## Notes
 
 - **External only.** The overlay never writes to the game, never allocates inside it, never injects. The only file it writes is `RobRunOverlay.ini` (and the diagnostic `RobRunOverlay.log`). Reads are rate-limitable via `Config::readIntervalMs` to keep RPM pressure low.
-- **View matrix layout.** `worldToScreen` assumes row-major. If positions project to the wrong quadrant, your view matrix is column-major — transpose on read or flip the indexing in `worldToScreen`.
+- **View matrix layout.** `Projection` stores the matrix row-major with the camera basis in rows 0..2; column-major sources are transposed on read and both layouts are tried by the scanner. `Camera` also offers a manual mode (`ManualCam`) that builds its own basis instead.
 - **Entity stride.** Default is `sizeof(void*)` — change in `SDK.h` if the game uses an array of inline structs instead of pointers.
 - **Version guard.** The EXE resource is authoritative; `GameAssembly.dll` is only a fallback. An unreadable version is `Unknown` (ESP allowed), never a false cut.
 - **Click-through.** Window is `WS_EX_TRANSPARENT` by default; `setInteractive(true)` flips it off while the menu is open so ImGui can receive input.
