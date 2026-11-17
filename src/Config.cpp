@@ -66,6 +66,9 @@ namespace {
         { kSectionEntity,  L"IsLocal",     &sdk::ent::kIsLocal,     Kind::Offset },
         { kSectionEntity,  L"BonePosHead", &sdk::ent::kBonePosHead, Kind::Offset },
         { kSectionEntity,  L"Visible",     &sdk::ent::kVisible,     Kind::Offset },
+        { kSectionEntity,  L"Transform",   &sdk::ent::kTransform,   Kind::Offset },
+        { kSectionEntity,  L"TransformPos", &sdk::ent::kTransformPos, Kind::Offset },
+        { kSectionEntity,  L"Head",        &sdk::ent::kHead,        Kind::Offset },
 
         // Display settings.
         { kSectionDisplay, L"Enabled",        &g.enabled,        Kind::Bool },
@@ -88,6 +91,8 @@ namespace {
         { kSectionDisplay, L"ColShadow",      g.colShadow,       Kind::Color },
         { kSectionDisplay, L"ColCrosshair",   g.colCrosshair,    Kind::Color },
         { kSectionDisplay, L"BoxThickness",   &g.boxThickness,   Kind::Int, 1.0, 10.0 },
+        { kSectionDisplay, L"BoxHeight",      &g.boxHeight,      Kind::Float, 0.1, 10.0 },
+        { kSectionDisplay, L"ManualCam",      &g.manualCam,      Kind::Bool },
         { kSectionDisplay, L"TextSize",       &g.textSize,       Kind::Float, 6.0, 48.0 },
         { kSectionDisplay, L"ReadIntervalMs", &g.readIntervalMs, Kind::Int, 0.0, 1000.0 },
     };
