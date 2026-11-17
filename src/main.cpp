@@ -11,7 +11,9 @@
 // Build: see CMakeLists.txt. Produces RobRunOverlay.exe — run as administrator
 // if the game is launched with elevation.
 
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 
 #include "Process.h"

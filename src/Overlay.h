@@ -1,7 +1,9 @@
 // Overlay.h - Transparent, click-through DX11 overlay window with ImGui.
 
 #pragma once
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #include <d3d11.h>
 #include <dxgi.h>
