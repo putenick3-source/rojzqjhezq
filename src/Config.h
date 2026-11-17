@@ -41,6 +41,8 @@ struct Config {
     // Rendering
     int   boxThickness    = 1;
     float textSize        = 13.0f;
+    float boxHeight       = 1.8f;    // world units, used when no head offset is known
+    bool  manualCam       = false;   // project with Camera's own basis instead of the game view-projection
 
     // Update rate for memory reads (ms between full world refreshes).
     // 0 = every frame. Raise this to reduce RPM pressure.
