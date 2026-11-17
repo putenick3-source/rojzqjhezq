@@ -1,6 +1,7 @@
 # Build output
 build/
 build_*/
+build_driver/
 build_fresh/
 dist/
 out/
