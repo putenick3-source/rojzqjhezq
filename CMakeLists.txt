@@ -47,11 +47,14 @@ add_executable(RobRunOverlay WIN32
     src/ESP.cpp
     src/Config.cpp
     src/Version.cpp
+    user/DriverClient.cpp
     ${IMGUI_SOURCES}
 )
 
 target_include_directories(RobRunOverlay PRIVATE
     src
+    user
+    driver
     "${IMGUI_DIR}"
     "${IMGUI_DIR}/backends"
 )
