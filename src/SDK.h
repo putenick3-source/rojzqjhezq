@@ -1,11 +1,12 @@
 // SDK.h - Rob Run game-specific offsets, structures, and constants.
 //
-// These values are tied to a specific build of RobRun.exe. When the game
-// updates they will usually need to be re-dumped. Dump them with Cheat Engine,
-// IDA, ReClass.NET, or x64dbg against the live process.
+// Offsets are anchored on the GameAssembly.dll module base (IL2CPP). They are
+// no longer compile-time constants: Overlay startup loads them from
+// RobRunOverlay.ini (next to the executable) and persists them back, so a new
+// dump only requires editing the INI, not rebuilding.
 //
-// Replace each `// FILL:` value with the offset / size found in your dump.
-// Everything else in the project is build-agnostic and will not need to change.
+// Replace each default `0x0` with the offset found in your dump. All offsets
+// are hexadecimal and relative to the GameAssembly.dll base.
 
 #pragma once
 #include <cstdint>
@@ -15,40 +16,46 @@ namespace sdk {
     // ---- Process targeting ---------------------------------------------------
     inline constexpr const wchar_t* kProcessName = L"RobRun.exe";
     inline constexpr const wchar_t* kWindowName  = L"Rob Run";          // visible window title; adjust if different
-    inline constexpr const wchar_t* kMainModule  = L"RobRun.exe";       // module whose base we anchor offsets to
+    inline constexpr const wchar_t* kAnchorModule = L"GameAssembly.dll"; // module whose base offsets are relative to
+
+    // Build the offsets below were dumped against. If the live GameAssembly.dll
+    // version differs, the ESP is cut until the INI has been re-dumped.
+    inline constexpr const wchar_t* kDumpedVersion = L"0.7.0.4049";
 
     // ---- Module-relative offsets --------------------------------------------
-    // Resolved as: moduleBase + offset -> (optional pointer chain) -> value
+    // Resolved as: GameAssembly.dll base + offset -> (optional pointer chain)
+    // Loaded from RobRunOverlay.ini, section [Offsets].
     namespace off {
         // Pointer to the local player structure.
         // Typical pattern: static ptr -> LocalPlayer*
-        inline constexpr uintptr_t kLocalPlayer   = 0x0;   // FILL: pattern "48 8B 05 ? ? ? ? 48 85 C0 74 ? 48 8B 80"
+        inline uintptr_t kLocalPlayer   = 0x0;   // INI: LocalPlayer
 
         // Pointer to the entity list (array of Entity*).
-        inline constexpr uintptr_t kEntityList    = 0x0;   // FILL: pattern "48 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B C8 E8"
+        inline uintptr_t kEntityList    = 0x0;   // INI: EntityList
 
         // Maximum entity count (number of slots in the list).
-        inline constexpr uintptr_t kEntityCount   = 0x0;   // FILL: often a sibling of EntityList
+        inline uintptr_t kEntityCount   = 0x0;   // INI: EntityCount
 
         // View matrix used for world-to-screen (row-major 4x4 float).
-        inline constexpr uintptr_t kViewMatrix    = 0x0;   // FILL: pattern "48 8D 0D ? ? ? ? 48 C1 E0 06"
+        inline uintptr_t kViewMatrix    = 0x0;   // INI: ViewMatrix
 
         // Game state / in-match flag — used to hide ESP on menu screens.
-        inline constexpr uintptr_t kGameState     = 0x0;   // FILL
+        inline uintptr_t kGameState     = 0x0;   // INI: GameState
     }
 
     // ---- Per-entity offsets (relative to an Entity* struct) -----------------
+    // Loaded from RobRunOverlay.ini, section [Entity].
     namespace ent {
-        inline constexpr uintptr_t kPosition      = 0x0;   // FILL: Vec3 world position
-        inline constexpr uintptr_t kRotation      = 0x0;   // FILL: Vec3 or quaternion
-        inline constexpr uintptr_t kHealth        = 0x0;   // FILL: int / float HP
-        inline constexpr uintptr_t kMaxHealth     = 0x0;   // FILL
-        inline constexpr uintptr_t kTeam          = 0x0;   // FILL: int team id
-        inline constexpr uintptr_t kName          = 0x0;   // FILL: inline char[32] or pointer to string
-        inline constexpr uintptr_t kIsAlive       = 0x0;   // FILL: bool / int
-        inline constexpr uintptr_t kIsLocal       = 0x0;   // FILL: bool flag, OR compare address to LocalPlayer
-        inline constexpr uintptr_t kBonePosHead   = 0x0;   // FILL: optional, for head-aim / head box
-        inline constexpr uintptr_t kVisible       = 0x0;   // FILL: optional visibility flag
+        inline uintptr_t kPosition      = 0x0;   // INI: Position      Vec3 world position
+        inline uintptr_t kRotation      = 0x0;   // INI: Rotation      Vec3 or quaternion
+        inline uintptr_t kHealth        = 0x0;   // INI: Health        int / float HP
+        inline uintptr_t kMaxHealth     = 0x0;   // INI: MaxHealth
+        inline uintptr_t kTeam          = 0x0;   // INI: Team          int team id
+        inline uintptr_t kName          = 0x0;   // INI: Name          inline char[32] or pointer to string
+        inline uintptr_t kIsAlive       = 0x0;   // INI: IsAlive       bool / int
+        inline uintptr_t kIsLocal       = 0x0;   // INI: IsLocal       bool flag, OR compare address to LocalPlayer
+        inline uintptr_t kBonePosHead   = 0x0;   // INI: BonePosHead   optional, for head-aim / head box
+        inline uintptr_t kVisible       = 0x0;   // INI: Visible       optional visibility flag
     }
 
     // Entity list stride — size of each pointer slot. Usually sizeof(void*) = 8.
@@ -61,3 +68,4 @@ namespace sdk {
     // Read dynamically from the local player; this is just a fallback.
     inline constexpr int kFallbackLocalTeam = -1;
 }
+

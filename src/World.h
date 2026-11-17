@@ -40,6 +40,10 @@ struct WorldSnap {
 
 class World {
 public:
+    // Gate set by the build guard. While false the snapshot stays invalid, so
+    // ESP is cut even if the process is otherwise readable.
+    void setBuildCompatible(bool ok) { buildCompatible_ = ok; }
+
     // Read a complete snapshot. Returns true if the snapshot is usable (at
     // least the view matrix + local player resolved).
     bool refresh(const Process& proc) {
@@ -126,7 +130,7 @@ public:
             }
         }
 
-        s.valid = (sdk::off::kViewMatrix != 0 && localPtr != 0);
+        s.valid = buildCompatible_ && (sdk::off::kViewMatrix != 0 && localPtr != 0);
 
         {
             std::lock_guard<std::mutex> lk(mtx_);
@@ -143,4 +147,5 @@ public:
 private:
     mutable std::mutex mtx_;
     WorldSnap          snap_;
+    bool               buildCompatible_ = false;
 };

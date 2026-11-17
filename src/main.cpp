@@ -22,6 +22,9 @@
 #include "ESP.h"
 #include "Config.h"
 #include "SDK.h"
+#include "Offsets.h"
+#include "Version.h"
+#include "Log.h"
 
 #include <chrono>
 #include <thread>
@@ -39,10 +42,17 @@ namespace {
 
     bool waitForProcess(Process& proc, std::atomic<bool>& run) {
         while (run) {
-            if (proc.attach(sdk::kProcessName)) return true;
+            if (proc.attach(sdk::kProcessName, sdk::kAnchorModule)) return true;
             std::this_thread::sleep_for(std::chrono::milliseconds(750));
         }
         return false;
+    }
+
+    // Re-evaluates the build guard and gates the world snapshot accordingly.
+    void applyBuildGuard(const Process& proc, World& world) {
+        const buildguard::Status status = buildguard::check(proc);
+        world.setBuildCompatible(status.compatible);
+        buildguard::record(status);
     }
 
 }
@@ -54,8 +64,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     std::atomic<bool> running{ true };
 
+    diag::log(L"demarrage - build de reference %s, offsets: %s",
+              sdk::kDumpedVersion, offsets::iniPath().c_str());
+    if (!offsets::load()) {
+        diag::log(L"offsets: echec du chargement, ESP inactif");
+    }
+
     Process proc;
     if (!waitForProcess(proc, running)) return 0;
+
+    World world;
+    applyBuildGuard(proc, world);
 
     Overlay overlay;
     if (!overlay.create(sdk::kWindowName)) {
@@ -63,7 +82,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         return 1;
     }
 
-    World world;
     auto lastRead = std::chrono::steady_clock::now();
     auto lastSync = std::chrono::steady_clock::now();
 
@@ -82,8 +100,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // --- Process liveness ---
         if (!proc.stillAlive()) {
+            world.setBuildCompatible(false);
             proc.detach();
             if (!waitForProcess(proc, running)) break;
+            applyBuildGuard(proc, world);
         }
 
         // --- Window geometry sync (lightweight; every ~200 ms) ---

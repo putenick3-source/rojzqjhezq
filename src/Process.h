@@ -26,8 +26,10 @@ public:
     }
 
     // Finds a running process by executable name (case-insensitive) and opens
-    // a handle with read + query rights. Returns true on success.
-    bool attach(const wchar_t* exeName) {
+    // a handle with read + query rights. `anchorModule` is the module the
+    // offsets are relative to (defaults to the executable itself) — for IL2CPP
+    // titles this is GameAssembly.dll. Returns true on success.
+    bool attach(const wchar_t* exeName, const wchar_t* anchorModule = nullptr) {
         detach();
 
         const DWORD pid = findPid(exeName);
@@ -42,7 +44,9 @@ public:
         pid_    = pid;
         handle_ = h;
 
-        if (!resolveModule(exeName, moduleBase_, moduleSize_)) {
+        const wchar_t* anchor =
+            (anchorModule && *anchorModule) ? anchorModule : exeName;
+        if (!resolveModule(anchor, moduleBase_, moduleSize_)) {
             detach();
             return false;
         }

@@ -45,6 +45,8 @@ add_executable(RobRunOverlay WIN32
     src/main.cpp
     src/Overlay.cpp
     src/ESP.cpp
+    src/Offsets.cpp
+    src/Version.cpp
     ${IMGUI_SOURCES}
 )
 
@@ -65,11 +67,12 @@ target_link_libraries(RobRunOverlay PRIVATE
     dxgi
     dwmapi
     psapi
+    version
 )
 
 # Strip CRT down for a smaller binary (optional).
 if(MSVC)
-    target_compile_options(RobRunOverlay PRIVATE /W4 /permissive- /MP)
+    target_compile_options(RobRunOverlay PRIVATE /W4 /WX /permissive- /MP)
     set_property(TARGET RobRunOverlay PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
