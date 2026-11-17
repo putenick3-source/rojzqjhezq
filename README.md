@@ -4,6 +4,8 @@ External, read-only overlay. Finds `RobRun.exe`, opens a transparent click-throu
 
 Pure `ReadProcessMemory` — no injection, no hooks, no writes to the game. All cheat logic lives outside the game process. Offsets are runtime values loaded from `RobRunOverlay.ini` and anchored on the `GameAssembly.dll` base.
 
+An optional manual-mapped kernel driver (`driver/`, see `docs/driver.md`) replaces the reads; when it is not loaded the overlay falls back to RPM unchanged.
+
 A build guard cuts the ESP when the live `GameAssembly.dll` version differs from `sdk::kDumpedVersion`.
 
 ## Build
@@ -97,6 +99,13 @@ robrun-overlay/
     Scan.h           resumable value scan, pointer-array / VP heuristics
     Dumper.h         state backing the Dumper tab
     Config.h/.cpp    single INI persistence (settings + offsets)
+  driver/
+    Shared.h         IOCTL contract shared with the client
+    Source.cpp       RrSvc.sys (ntoskrnl only, no CRT, manual mapped)
+    build.bat        WDK kernel build
+  user/
+    DriverClient.h/.cpp  device client, chunked/batched reads
+  docs/driver.md     mapping, test order, EAC audit notes
 ```
 
 ## Notes
