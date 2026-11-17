@@ -23,6 +23,8 @@
 #include "Config.h"
 #include "SDK.h"
 #include "Version.h"
+#include "Projection.h"
+#include "Scan.h"
 #include "Log.h"
 
 #include "imgui.h"
@@ -58,6 +60,34 @@ namespace {
         verdict = status.verdict;
         world.setBuildVerdict(status.verdict);
         buildguard::record(status);
+    }
+
+    // Resolves the view-projection: the INI offset first (either layout), then a
+    // heuristic scan. A scan hit is written back as a module-relative offset.
+    void detectViewProjection(const Process& proc, Projection& vp) {
+        vp = Projection{};
+        if (!proc.isAttached() || !proc.base()) return;
+
+        if (sdk::off::kViewMatrix) {
+            const uintptr_t at = proc.base() + sdk::off::kViewMatrix;
+            for (Layout layout : { Layout::RowMajor, Layout::ColumnMajor }) {
+                Projection candidate;
+                if (readProjection(proc, at, layout, candidate) && candidate.valid()) {
+                    vp = candidate;
+                    return;
+                }
+            }
+        }
+
+        Projection found;
+        size_t checked = 0;
+        if (scan::findViewProjection(proc, found, 512u * 1024u * 1024u, checked) &&
+            found.valid() && found.addr > proc.base()) {
+            vp = found;
+            sdk::off::kViewMatrix = found.addr - proc.base();
+            diag::log(L"projection: ViewMatrix detectee = 0x%llX (%zu candidats)",
+                      (unsigned long long)sdk::off::kViewMatrix, checked);
+        }
     }
 
     // Small status pill inside the config menu (ESP.cpp is left untouched).
@@ -113,6 +143,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     buildguard::Verdict verdict = buildguard::Verdict::Unknown;
     applyBuildGuard(proc, world, verdict);
 
+    // Cached view-projection, refreshed on a 2 s cadence when lost or stale.
+    Projection vp;
+    detectViewProjection(proc, vp);
+
     Overlay overlay;
     if (!overlay.create(sdk::kWindowName)) {
         proc.detach();
@@ -121,6 +155,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     auto lastRead = std::chrono::steady_clock::now();
     auto lastSync = std::chrono::steady_clock::now();
+    auto lastVp   = std::chrono::steady_clock::now();
 
     Config& cfg = gConfig();
 
@@ -142,6 +177,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
             proc.detach();
             if (!waitForProcess(proc, running)) break;
             applyBuildGuard(proc, world, verdict);
+            detectViewProjection(proc, vp);
+            lastVp = std::chrono::steady_clock::now();
         }
 
         // --- Window geometry sync (lightweight; every ~200 ms) ---
@@ -151,24 +188,32 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
             lastSync = now;
         }
 
+        // --- View-projection re-detection (2 s, only when unusable) ---
+        if (!vp.valid() || !vp.addr || !proc.validate(vp.addr, 64)) {
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(now - lastVp).count() >= 2000) {
+                detectViewProjection(proc, vp);
+                lastVp = now;
+            }
+        }
+
         // --- World refresh ---
         const int intervalMs = cfg.readIntervalMs;
         const bool shouldRead =
             intervalMs <= 0 ||
             std::chrono::duration_cast<std::chrono::milliseconds>(now - lastRead).count() >= intervalMs;
         if (shouldRead) {
-            world.refresh(proc);
+            world.refresh(proc, vp);
             lastRead = now;
         }
 
         // --- Render ---
         overlay.render([&]() {
             const auto snap = world.get();
-            esp::render(snap, cfg,
+            esp::render(snap, cfg, proc,
                         (float)overlay.width(), (float)overlay.height());
 
             if (cfg.showMenu) {
-                esp::drawMenu(cfg);
+                esp::drawMenu(cfg, snap, proc);
                 drawBuildBadge(verdict);
             }
         });
