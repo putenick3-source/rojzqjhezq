@@ -69,6 +69,63 @@ public:
     uintptr_t base()   const { return moduleBase_; }
     size_t    size()   const { return moduleSize_; }
 
+    struct Region {
+        uintptr_t base = 0;
+        size_t    size = 0;
+    };
+
+    // True when [address, address + bytes) is committed, readable and not
+    // guarded. Cheaper and safer than probing with ReadProcessMemory.
+    bool validate(uintptr_t address, size_t bytes) const {
+        if (!handle_ || !address || !bytes) return false;
+        uintptr_t cur = address;
+        while (cur < address + bytes) {
+            MEMORY_BASIC_INFORMATION mbi{};
+            if (!VirtualQueryEx(handle_, (LPCVOID)cur, &mbi, sizeof(mbi))) return false;
+            if (mbi.State != MEM_COMMIT || !readable(mbi.Protect)) return false;
+            const uintptr_t next =
+                reinterpret_cast<uintptr_t>(mbi.BaseAddress) + mbi.RegionSize;
+            if (next <= cur) return false;
+            cur = next;
+        }
+        return true;
+    }
+
+    // Enumerates readable committed regions. `budget` caps the total bytes
+    // reported (0 = everything); it keeps game-sized scans bounded.
+    std::vector<Region> regions(size_t budget = 0) const {
+        std::vector<Region> out;
+        if (!handle_) return out;
+
+        SYSTEM_INFO si{};
+        GetSystemInfo(&si);
+        uintptr_t cur = reinterpret_cast<uintptr_t>(si.lpMinimumApplicationAddress);
+        const uintptr_t last =
+            reinterpret_cast<uintptr_t>(si.lpMaximumApplicationAddress);
+
+        size_t total = 0;
+        while (cur < last) {
+            MEMORY_BASIC_INFORMATION mbi{};
+            if (!VirtualQueryEx(handle_, (LPCVOID)cur, &mbi, sizeof(mbi))) break;
+
+            const uintptr_t base = reinterpret_cast<uintptr_t>(mbi.BaseAddress);
+            if (mbi.State == MEM_COMMIT && readable(mbi.Protect)) {
+                size_t size = mbi.RegionSize;
+                if (budget && total + size > budget) size = budget - total;
+                if (size) {
+                    out.push_back({ base, size });
+                    total += size;
+                }
+                if (budget && total >= budget) break;
+            }
+
+            const uintptr_t next = base + mbi.RegionSize;
+            if (next <= cur) break;
+            cur = next;
+        }
+        return out;
+    }
+
     // Confirms the process is still running. Call periodically from the main
     // loop so the overlay can re-attach when the game exits / restarts.
     bool stillAlive() const {
@@ -127,6 +184,21 @@ public:
     }
 
 private:
+    static bool readable(DWORD protect) {
+        if (protect & PAGE_GUARD) return false;
+        switch (protect & 0xFF) {
+        case PAGE_READONLY:
+        case PAGE_READWRITE:
+        case PAGE_WRITECOPY:
+        case PAGE_EXECUTE_READ:
+        case PAGE_EXECUTE_READWRITE:
+        case PAGE_EXECUTE_WRITECOPY:
+            return true;
+        default:
+            return false;
+        }
+    }
+
     static DWORD findPid(const wchar_t* exeName) {
         HANDLE snap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
         if (snap == INVALID_HANDLE_VALUE) return 0;
