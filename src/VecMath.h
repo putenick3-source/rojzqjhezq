@@ -20,7 +20,28 @@ struct Vec3 {
     float dot(const Vec3& o) const { return x * o.x + y * o.y + z * o.z; }
     float length() const { return std::sqrt(x * x + y * y + z * z); }
     float distanceTo(const Vec3& o) const { return (*this - o).length(); }
+
+    bool finite() const {
+        return std::isfinite(x) && std::isfinite(y) && std::isfinite(z);
+    }
+
+    Vec3 normalized() const {
+        const float len = length();
+        if (!(len > 0.f) || !std::isfinite(len)) return {};
+        return *this * (1.f / len);
+    }
+
+    Vec3 cross(const Vec3& o) const {
+        return { y * o.z - z * o.y, z * o.x - x * o.z, x * o.y - y * o.x };
+    }
 };
+
+// Rejects non-finite vectors, components out of [-lim, lim] and (0,0,0).
+inline bool sane(const Vec3& v, float lim) {
+    if (!v.finite()) return false;
+    if (std::fabs(v.x) > lim || std::fabs(v.y) > lim || std::fabs(v.z) > lim) return false;
+    return v.x != 0.f || v.y != 0.f || v.z != 0.f;
+}
 
 struct Matrix4 { float m[4][4] = {}; };
 
