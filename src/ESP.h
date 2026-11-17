@@ -7,13 +7,14 @@
 #pragma once
 #include "World.h"
 #include "Config.h"
+#include "Process.h"
 #include "VecMath.h"
 
 namespace esp {
 
-    void render(const WorldSnap& world, const Config& cfg,
+    void render(const WorldSnap& world, const Config& cfg, Process& proc,
                 float screenW, float screenH);
 
-    void drawMenu(Config& cfg);
+    void drawMenu(Config& cfg, const WorldSnap& world, const Process& proc);
 
 }
